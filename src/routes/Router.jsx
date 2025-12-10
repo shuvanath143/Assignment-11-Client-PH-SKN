@@ -8,7 +8,11 @@ import PrivateRoute from './PrivateRoute'
 import DashboardLayout from "../layouts/DashboardLayout";
 import AddLesson from "../pages/Dashboard/AddLesson";
 import Home from "../pages/Home/Home";
+import Pricing from "../pages/Pricing/Pricing";
 import LessonDetails from "../components/LessonCard/LessonDetails";
+import PaymentSuccess from "../pages/Pricing/PaymentSuccess";
+import PaymentCancelled from "../pages/Pricing/PaymentCancelled";
+import PublicLessons from "../pages/PublicLessons/PublicLessons";
 
 // import AdminRoute from "./AdminRoute";
 
@@ -20,7 +24,23 @@ export const router = createBrowserRouter([
       {
         index: true,
         path: "/",
-        Component: Home
+        Component: Home,
+      },
+      {
+        path: '/public-lessons',
+        Component: PublicLessons
+      },
+      {
+        path: "/pricing",
+        Component: Pricing,
+      },
+      {
+        path: "payment-success",
+        Component: PaymentSuccess,
+      },
+      {
+        path: "payment-cancelled",
+        Component: PaymentCancelled,
       },
     ],
   },
@@ -48,12 +68,12 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "add-lesson",
-        Component: AddLesson
+        Component: AddLesson,
       },
       {
         path: "lessons/:id",
-        Component: LessonDetails
-      }
+        Component: LessonDetails,
+      },
     ],
   },
 ]);

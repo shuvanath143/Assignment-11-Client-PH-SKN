@@ -29,12 +29,12 @@ const LessonDetails = () => {
   //   const [lesson, setLesson] = useState(null);
 //   const [similarLessons, setSimilarLessons] = useState([]);
 
-  const [liked, setLiked] = useState(false);
-  const [favorite, setFavorite] = useState(false);
+  // const [liked, setLiked] = useState(false);
+  // const [favorite, setFavorite] = useState(false);
 
   const isPremiumUser = user?.isPremium;
 
-  const { data: lesson = [], isLoading: isLessonLoading, error: lessonError, refetch } = useQuery({
+  const { data: lesson = [], isLoading: isLessonLoading, error: lessonError, refetch: lessonRefetch } = useQuery({
     queryKey: ["lesson", id],
     queryFn: async () => {
       const res = await axiosInstance.get(`/lessons/${id}`);
@@ -44,19 +44,47 @@ const LessonDetails = () => {
     enabled: !!id,
   });
 
-  useEffect(() => {
-    if (lesson) {
-      setLiked(lesson.likes?.includes(user?.email));
-      setFavorite(lesson.favorites?.includes(user?.email));
-    }
-  }, [lesson, user?.email]);
+  const {
+    data: favoriteLessons = [],
+    isLoading: isFavoriteLessonLoading,
+    error: favoriteLessonError,
+    refetch: favoriteRefetch,
+  } = useQuery({
+    queryKey: ["favoriteLessons", user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        `/lessons/favorite?email=${user?.email}`
+      );
+      console.log('FavoriteLesson', res.data);
+      return res.data;
+    },
+    enabled: !!user?.email,
+  });
+
+  const liked = lesson?.likes?.includes(user?.email);
+  console.log('Liked', liked)
+  const lessonId = lesson._id
+  console.log(lessonId, typeof lessonId)
+  const favorite = favoriteLessons?.map(id => id?.toString())
+    ?.includes(lessonId?.toString());
+    console.log("favorite", favorite);
+
+  // useEffect(() => {
+  //   if (lesson) {
+  //     setLiked(lesson.likes?.includes(user?.email));
+
+  //     const isFavorite = favoriteLessons.map(id => id?.toString()).includes(lesson._id?.toString())
+
+  //     setFavorite(isFavorite);
+  //   }
+  // }, [lesson, user?.email, favoriteLessons]);
 
   const { data: similarLessons = [], isLoading: isSimilarLessonsLoading } =
     useQuery({
       enabled: !!lesson?.category,
-      queryKey: ["similarLessons", lesson?.category, axiosInstance],
+      queryKey: ["similarLessons", lesson?.category],
       queryFn: async () => {
-        const res = await axiosInstance(`/lessons?category=${lesson.category}`);
+        const res = await axiosInstance.get(`/lessons?category=${lesson.category}`);
         return res.data.slice(0, 6);
       },
     });
@@ -82,19 +110,19 @@ const LessonDetails = () => {
     if (!user)
       return Swal.fire("Login Required", "Please log in to like", "info");
 
-    setLiked(!liked);
+    // setLiked(!liked);
     await axiosSecure.patch(`/lessons/like/${lesson._id}?email=${user.email}`);
-    refetch()
+    lessonRefetch()
   };
 
   const handleFavorite = async () => {
     if (!user)
       return Swal.fire("Login Required", "Please log in to save", "info");
 
-    setFavorite(!favorite);
-    console.log(favorite)
+    // setFavorite(!favorite);
+    // console.log(favorite)
     await axiosSecure.patch(`/lessons/favorite/${lesson._id}?email=${user.email}`);
-    refetch()
+    favoriteRefetch()
   };
 
   const handleReport = () => {

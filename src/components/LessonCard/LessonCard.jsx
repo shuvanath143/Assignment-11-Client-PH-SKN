@@ -2,7 +2,7 @@
 import { FaLock, FaRegClock } from "react-icons/fa";
 import { Link } from "react-router";
 
-const LessonCard = ({ lesson, isPremiumUser }) => {
+const LessonCard = ({ lesson, isPremium }) => {
   const {
     _id,
     title,
@@ -15,7 +15,7 @@ const LessonCard = ({ lesson, isPremiumUser }) => {
     featuredImageUrl,
   } = lesson;
 
-  const premiumLocked = accessLevel === "premium" && !isPremiumUser;
+  const premiumLocked = accessLevel === "premium" && !isPremium;
 
   return (
     <div className="relative bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden">

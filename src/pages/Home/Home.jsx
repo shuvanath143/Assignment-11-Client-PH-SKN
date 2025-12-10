@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import LessonCard from "../../components/LessonCard/LessonCard";
 import { FaSearch } from "react-icons/fa";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import usePremium from "../../hooks/usePremium";
 
 const Home = ({ user }) => {
   const axiosSecure = useAxiosSecure();
@@ -12,6 +13,8 @@ const Home = ({ user }) => {
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [toneFilter, setToneFilter] = useState("");
+
+  const { isPremium } = usePremium()
 
   const categories = [
     "Personal Growth",
@@ -52,7 +55,7 @@ const Home = ({ user }) => {
     setFiltered(data);
   }, [search, categories, categoryFilter, toneFilter, lessons, axiosSecure]);
 
-  const isPremiumUser = user?.subscription === "premium";
+  // const isPremiumUser = user?.subscription === "premium";
 
   return (
     <div className="max-w-7xl mx-auto px-4 pt-6 pb-16">
@@ -119,7 +122,7 @@ const Home = ({ user }) => {
             <LessonCard
               key={lesson._id}
               lesson={lesson}
-              isPremiumUser={isPremiumUser}
+              isPremium={isPremium}
             />
           ))}
         </div>
@@ -137,7 +140,7 @@ const Home = ({ user }) => {
               <LessonCard
                 key={lesson._id}
                 lesson={lesson}
-                isPremiumUser={isPremiumUser}
+                isPremium={isPremium}
               />
             ))}
         </div>

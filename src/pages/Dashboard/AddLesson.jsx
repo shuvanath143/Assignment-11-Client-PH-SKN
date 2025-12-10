@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
+import usePremium from "../../hooks/usePremium";
 
-const image_hosting_key = import.meta.env.VITE_IMGBB_API_KEY;
+const image_hosting_key = import.meta.env.VITE_image_host;
 const image_upload_url = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const AddLesson = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const isPremiumUser = usePremium()
+  console.log(isPremiumUser.isPremium)
 
-  const [isPremiumUser] = useState(user?.isPremium || false);
+  // const [isPremiumUser] = useState(user?.isPremium || false);
 
   const {
     register,
@@ -175,16 +178,16 @@ const AddLesson = () => {
 
           <select
             {...register("accessLevel")}
-            disabled={!isPremiumUser}
+            disabled={!isPremiumUser.isPremium}
             className={`w-full border px-3 py-2 rounded ${
-              !isPremiumUser ? "bg-gray-200" : ""
+              !isPremiumUser.isPremium ? "bg-gray-200" : ""
             }`}
           >
             <option value="free">Free</option>
             <option value="premium">Premium</option>
           </select>
 
-          {!isPremiumUser && (
+          {!isPremiumUser.isPremium && (
             <p className="text-sm text-blue-500">
               Upgrade to Premium ⭐ to create premium lessons
             </p>
