@@ -13,6 +13,7 @@ import LessonDetails from "../components/LessonCard/LessonDetails";
 import PaymentSuccess from "../pages/Pricing/PaymentSuccess";
 import PaymentCancelled from "../pages/Pricing/PaymentCancelled";
 import PublicLessons from "../pages/PublicLessons/PublicLessons";
+import MyLessons from "../pages/Dashboard/MyLessons";
 
 // import AdminRoute from "./AdminRoute";
 
@@ -74,6 +75,10 @@ export const router = createBrowserRouter([
         path: "lessons/:id",
         Component: LessonDetails,
       },
+      {
+        path: "my-lessons",
+        Component: MyLessons
+      }
     ],
   },
 ]);

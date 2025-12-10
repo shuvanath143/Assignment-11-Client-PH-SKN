@@ -9,12 +9,13 @@ const MyLessons = () => {
     const { data: myLessons = [] } = useQuery({
         queryKey: ['my-lessons', user?.email],
         queryFn: async () => {
-            const res = await axiosSecure(``)
+            const res = await axiosSecure(`/lessons?email=${user?.email}`)
+            return res.data
         }
     })
     return (
         <div>
-            
+            {myLessons.length}
         </div>
     );
 };
