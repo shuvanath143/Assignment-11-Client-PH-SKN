@@ -6,6 +6,8 @@ import {
   FaBookmark,
   FaRegBookmark,
   FaFlag,
+  FaShare,
+  FaClock,
 } from "react-icons/fa";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -13,123 +15,131 @@ import LessonCard from "../../components/LessonCard/LessonCard";
 import useAxios from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
 import usePremium from "../../hooks/usePremium";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 const LessonDetails = () => {
   const { user } = useAuth();
   const { id } = useParams();
-  const { isPremium } = usePremium();
-  
+  const { isPremium } = usePremium()
+  console.log(id);
   const navigate = useNavigate();
 
   const axiosInstance = useAxios();
   const axiosSecure = useAxiosSecure();
-  const queryClient = useQueryClient()
 
-  // Fetch lesson
-  const {
-    data: lesson,
-    isLoading: isLessonLoading,
-    error: lessonError,
-    refetch: lessonRefetch,
-  } = useQuery({
+  // const [lesson, setLesson] = useState(null);
+  // const [similarLessons, setSimilarLessons] = useState([]);
+
+  // const [liked, setLiked] = useState(false);
+  // const [favorite, setFavorite] = useState(false);
+
+  // const isPremiumUser = user?.isPremium;
+
+  const { data: lesson = [], isLoading: isLessonLoading, error: lessonError, refetch: lessonRefetch } = useQuery({
     queryKey: ["lesson", id],
     queryFn: async () => {
       const res = await axiosInstance.get(`/lessons/${id}`);
+      console.log(res.data)
       return res.data;
     },
     enabled: !!id,
   });
 
-  // Fetch favorite lessons (only if user logged in)
-  const { data: favoriteLessons = [], refetch: favoriteRefetch } = useQuery({
+  const {
+    data: favoriteLessons = [],
+    isLoading: isFavoriteLessonLoading,
+    error: favoriteLessonError,
+    refetch: favoriteRefetch,
+  } = useQuery({
     queryKey: ["favoriteLessons", user?.email],
     queryFn: async () => {
-      const { data } = await axiosSecure.get(
+      const res = await axiosSecure.get(
         `/lessons/favorite?email=${user?.email}`
       );
-      return data; // returns only array: ["id1", "id2"]
+      console.log('FavoriteLesson', res.data);
+      return res.data;
     },
     enabled: !!user?.email,
   });
 
-  const liked = user ? lesson?.likes?.includes(user.email) : false;
-  console.log("favoriteLessons", favoriteLessons)
-  console.log(id.toString())
-  const favorite = user
-    ? favoriteLessons?.includes(id?.toString())
-    : false;
-    console.log("Favoritelessons & Favorite:" ,favoriteLessons, favorite)
+  const liked = lesson?.likes?.includes(user?.email);
+  console.log('Liked', liked)
+  const lessonId = lesson._id
+  console.log(lessonId, typeof lessonId)
+  const favorite = favoriteLessons?.map(id => id?.toString())
+    ?.includes(lessonId?.toString());
+    console.log("favorite", favorite);
 
-  // Similar lessons
-  const { data: similarLessons = [] } = useQuery({
-    queryKey: ["similarLessons", lesson?.category],
-    queryFn: async () => {
-      const res = await axiosInstance.get(
-        `/lessons?category=${lesson.category}`
-      );
-      return res.data.slice(0, 6);
-    },
-    enabled: !!lesson?.category,
-  });
+  // useEffect(() => {
+  //   if (lesson) {
+  //     setLiked(lesson.likes?.includes(user?.email));
 
-  if (isLessonLoading) return <p className="text-center py-20">Loading...</p>;
-  if (lessonError)
+  //     const isFavorite = favoriteLessons.map(id => id?.toString()).includes(lesson._id?.toString())
+
+  //     setFavorite(isFavorite);
+  //   }
+  // }, [lesson, user?.email, favoriteLessons]);
+
+  const { data: similarLessons = [], isLoading: isSimilarLessonsLoading } =
+    useQuery({
+      enabled: !!lesson?.category,
+      queryKey: ["similarLessons", lesson?.category],
+      queryFn: async () => {
+        const res = await axiosInstance.get(`/lessons?category=${lesson.category}`);
+        return res.data.slice(0, 6);
+      },
+    });
+
+  // --- Loading and Error States ---
+  if (isLessonLoading || !lesson) {
+    return <p className="text-center py-20">Loading...</p>;
+  }
+
+  if (lessonError) {
+    // Handle error state, e.g., show a dedicated error message or component
     return (
-      <p className="text-center py-20 text-red-600">Error loading lesson.</p>
+      <p className="text-center py-20 text-red-600">
+        Error loading lesson: {lessonError.message}
+      </p>
     );
-  if (!lesson) return <p className="text-center py-20">Lesson not found.</p>;
+  }
+
 
   const premiumLocked = lesson.accessLevel === "premium" && !isPremium;
 
   const handleLike = async () => {
-    if (!user) return navigate("/login");
+    if (!user)
+      return Swal.fire("Login Required", "Please log in to like", "info");
+
+    // setLiked(!liked);
     await axiosSecure.patch(`/lessons/like/${lesson._id}?email=${user.email}`);
-    lessonRefetch();
+    lessonRefetch()
   };
 
   const handleFavorite = async (lessonId) => {
-    console.log(lessonId)
-    if (!user) return navigate("/login");
-    await axiosSecure.patch(
-      `/lessons/favorite/${lessonId}?email=${user.email}`
-    );
-    queryClient.invalidateQueries(["favoriteLessons"]);
-    queryClient.invalidateQueries(["lesson"]);
-    favoriteRefetch();
+    if (!user)
+      return Swal.fire("Login Required", "Please log in to save", "info");
+
+    // setFavorite(!favorite);
+    // console.log(favorite)
+    await axiosSecure.patch(`/lessons/favorite/${lessonId}?email=${user.email}`);
+    favoriteRefetch()
   };
 
   const handleReport = () => {
-    if (!user) return navigate("/login");
-
     Swal.fire({
-      title: "Report Lesson",
-      text: "Select a reason for reporting this lesson",
+      title: "Report Lesson?",
+      text: "Are you sure?",
       icon: "warning",
-      input: "select",
-      inputOptions: {
-        "Inappropriate Content": "Inappropriate Content",
-        "Hate Speech or Harassment": "Hate Speech or Harassment",
-        "Misleading or False Information": "Misleading or False Information",
-        "Spam or Promotional Content": "Spam or Promotional Content",
-        "Sensitive or Disturbing Content": "Sensitive or Disturbing Content",
-        Other: "Other",
-      },
-      inputPlaceholder: "Choose a reason",
       showCancelButton: true,
       confirmButtonColor: "#d33",
       confirmButtonText: "Report",
-      inputValidator: (value) => {
-        if (!value) return "Please select a reason!";
-      },
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const selectedReason = result.value;
-
         await axiosSecure.post("/lesson-reports", {
           lessonId: lesson._id,
           reporterUserId: user?.email,
-          reason: selectedReason,
+          reason: "Inappropriate Content",
           timestamp: new Date(),
         });
 
@@ -137,7 +147,6 @@ const LessonDetails = () => {
       }
     });
   };
-
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-12">
@@ -150,11 +159,13 @@ const LessonDetails = () => {
             premiumLocked ? "blur-md opacity-60" : ""
           }`}
         />
+
         {premiumLocked && (
           <div className="absolute inset-0 bg-black/40 backdrop-blur-md flex flex-col items-center justify-center text-white rounded-xl">
             <FaLock className="text-5xl mb-3" />
             <p className="text-lg font-semibold">Premium Content</p>
             <p className="mb-4 text-sm">Upgrade to unlock full access.</p>
+
             <Link
               to="/pricing"
               className="bg-yellow-500 px-6 py-2 rounded-lg font-bold text-black"
@@ -168,17 +179,20 @@ const LessonDetails = () => {
       {/* CONTENT */}
       <div className={`${premiumLocked ? "blur-sm select-none" : "mt-10"}`}>
         <h1 className="text-4xl font-bold mb-4">{lesson.title}</h1>
+
+        {/* Category */}
         <div className="flex gap-4 mb-6">
           <span className="px-3 py-1 bg-gray-200 rounded-full text-sm font-semibold">
             {lesson.category}
           </span>
         </div>
 
+        {/* Description */}
         <p className="text-lg text-gray-700 leading-relaxed mb-10">
           {lesson.fullDescription}
         </p>
 
-        {/* Author */}
+        {/* Author Card */}
         <div className="p-5 border rounded-xl shadow-sm flex items-center gap-4 bg-gray-50 mb-10">
           <img
             src={lesson.creatorPhoto}
@@ -199,7 +213,7 @@ const LessonDetails = () => {
             ❤ {lesson.likes?.length || 0} Likes
           </p>
           <p className="flex items-center gap-2">
-            🔖 {lesson.favoritesCount || 0} Favorites
+            🔖 {lesson.favorites?.length || 0} Favorites
           </p>
         </div>
 
@@ -230,6 +244,7 @@ const LessonDetails = () => {
         {/* Similar Lessons */}
         <div className="mt-12">
           <h2 className="text-2xl font-bold mb-6">Similar Lessons</h2>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {similarLessons.map((lesson) => (
               <LessonCard

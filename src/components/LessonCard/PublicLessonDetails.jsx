@@ -15,11 +15,10 @@ import useAuth from "../../hooks/useAuth";
 import usePremium from "../../hooks/usePremium";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-const LessonDetails = () => {
+const PublicLessonDetails = () => {
   const { user } = useAuth();
   const { id } = useParams();
   const { isPremium } = usePremium();
-  
   const navigate = useNavigate();
 
   const axiosInstance = useAxios();
@@ -103,33 +102,18 @@ const LessonDetails = () => {
     if (!user) return navigate("/login");
 
     Swal.fire({
-      title: "Report Lesson",
-      text: "Select a reason for reporting this lesson",
+      title: "Report Lesson?",
+      text: "Are you sure?",
       icon: "warning",
-      input: "select",
-      inputOptions: {
-        "Inappropriate Content": "Inappropriate Content",
-        "Hate Speech or Harassment": "Hate Speech or Harassment",
-        "Misleading or False Information": "Misleading or False Information",
-        "Spam or Promotional Content": "Spam or Promotional Content",
-        "Sensitive or Disturbing Content": "Sensitive or Disturbing Content",
-        Other: "Other",
-      },
-      inputPlaceholder: "Choose a reason",
       showCancelButton: true,
       confirmButtonColor: "#d33",
       confirmButtonText: "Report",
-      inputValidator: (value) => {
-        if (!value) return "Please select a reason!";
-      },
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const selectedReason = result.value;
-
         await axiosSecure.post("/lesson-reports", {
           lessonId: lesson._id,
           reporterUserId: user?.email,
-          reason: selectedReason,
+          reason: "Inappropriate Content",
           timestamp: new Date(),
         });
 
@@ -137,7 +121,6 @@ const LessonDetails = () => {
       }
     });
   };
-
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-12">
@@ -245,4 +228,4 @@ const LessonDetails = () => {
   );
 };
 
-export default LessonDetails;
+export default PublicLessonDetails;

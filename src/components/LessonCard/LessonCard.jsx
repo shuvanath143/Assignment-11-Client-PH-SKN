@@ -2,7 +2,7 @@
 import { FaLock, FaRegClock } from "react-icons/fa";
 import { Link } from "react-router";
 
-const LessonCard = ({ lesson, isPremium }) => {
+const LessonCard = ({ lesson, isPremium, isInsideDashboard }) => {
   const {
     _id,
     title,
@@ -15,6 +15,9 @@ const LessonCard = ({ lesson, isPremium }) => {
     featuredImageUrl,
   } = lesson;
 
+  const path = isInsideDashboard
+    ? `/dashboard/lessons/${_id}`
+    : `/lessons/${_id}`;
   const premiumLocked = accessLevel === "premium" && !isPremium;
 
   return (
@@ -85,7 +88,7 @@ const LessonCard = ({ lesson, isPremium }) => {
 
         {/* Button */}
         <Link
-          to={`/dashboard/lessons/${_id}`}
+          to={path}
           className="block mt-4 text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
         >
           See Details

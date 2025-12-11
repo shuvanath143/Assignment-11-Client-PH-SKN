@@ -23,6 +23,7 @@ const PublicLessons = () => {
                 <LessonCard
                   key={lesson._id}
                   lesson={lesson}
+                  isInsideDashboard={false}
                 />
               ))}
           </div>

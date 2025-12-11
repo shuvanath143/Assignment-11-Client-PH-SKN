@@ -28,8 +28,12 @@ export const router = createBrowserRouter([
         Component: Home,
       },
       {
-        path: '/public-lessons',
-        Component: PublicLessons
+        path: "/public-lessons",
+        Component: PublicLessons,
+      },
+      {
+        path: "lessons/:id",
+        Component: LessonDetails,
       },
       {
         path: "/pricing",
@@ -77,8 +81,8 @@ export const router = createBrowserRouter([
       },
       {
         path: "my-lessons",
-        Component: MyLessons
-      }
+        Component: MyLessons,
+      },
     ],
   },
 ]);
