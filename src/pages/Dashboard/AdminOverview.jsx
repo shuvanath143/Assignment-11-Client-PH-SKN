@@ -11,6 +11,7 @@ import {
   Line,
   ResponsiveContainer,
 } from "recharts";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const AdminOverview = () => {
   const [stats, setStats] = useState({
@@ -23,22 +24,18 @@ const AdminOverview = () => {
     userGrowth: [],
   });
 
+  const axiosSecure = useAxiosSecure()
   useEffect(() => {
     // Fetch stats from backend endpoints
     const fetchStats = async () => {
-      const users = await fetch("http://localhost:5000/users").then((res) =>
-        res.json()
-      );
-      const lessons = await fetch("http://localhost:5000/lessons").then((res) =>
-        res.json()
-      );
-      const reports = await fetch(
-        "http://localhost:5000/reported-lessons"
-      ).then((res) => res.json());
+      const users = await axiosSecure.get("/users")
+      const lessons = await axiosSecure.get("/lessons")
+      const reports = await axiosSecure.get("/lesson-reports")
+      console.log(reports.data.length)
 
       // Most active contributors
       const contributorCount = {};
-      lessons.forEach((lesson) => {
+      lessons.data.forEach((lesson) => {
         const email = lesson.creatorEmail;
         if (contributorCount[email]) contributorCount[email]++;
         else contributorCount[email] = 1;
@@ -50,7 +47,7 @@ const AdminOverview = () => {
 
       // Today's new lessons
       const today = new Date();
-      const todaysLessons = lessons.filter((lesson) => {
+      const todaysLessons = lessons.data.filter((lesson) => {
         const created = new Date(lesson.createdAt);
         return created.toDateString() === today.toDateString();
       }).length;
@@ -60,7 +57,7 @@ const AdminOverview = () => {
       for (let i = 6; i >= 0; i--) {
         const day = new Date();
         day.setDate(day.getDate() - i);
-        const dayCount = lessons.filter(
+        const dayCount = lessons.data.filter(
           (l) => new Date(l.createdAt).toDateString() === day.toDateString()
         ).length;
         lessonGrowth.push({ date: day.toLocaleDateString(), count: dayCount });
@@ -71,16 +68,16 @@ const AdminOverview = () => {
       for (let i = 6; i >= 0; i--) {
         const day = new Date();
         day.setDate(day.getDate() - i);
-        const dayCount = users.filter(
+        const dayCount = users.data.filter(
           (u) => new Date(u.createdAt).toDateString() === day.toDateString()
         ).length;
         userGrowth.push({ date: day.toLocaleDateString(), count: dayCount });
       }
 
       setStats({
-        totalUsers: users.length,
-        totalLessons: lessons.filter((l) => l.visibility === "public").length,
-        totalReported: reports.length,
+        totalUsers: users.data.length,
+        totalLessons: lessons.data.length,
+        totalReported: reports.data.length,
         topContributors,
         todaysLessons,
         lessonGrowth,
@@ -89,7 +86,7 @@ const AdminOverview = () => {
     };
 
     fetchStats();
-  }, []);
+  }, [axiosSecure]);
 
   return (
     <div>
