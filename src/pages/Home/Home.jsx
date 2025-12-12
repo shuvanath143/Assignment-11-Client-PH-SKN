@@ -53,7 +53,7 @@ const Home = ({ user }) => {
     }
 
     setFiltered(data);
-  }, [search, categories, categoryFilter, toneFilter, lessons, axiosSecure]);
+  }, [search, categoryFilter, toneFilter, lessons, axiosSecure]);
 
   // const isPremiumUser = user?.subscription === "premium";
 

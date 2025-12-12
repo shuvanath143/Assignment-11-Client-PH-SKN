@@ -17,6 +17,7 @@ import MyLessons from "../pages/Dashboard/Users/MyLessons";
 import AdminRoute from "./AdminRoute";
 import AdminOverview from "../pages/Dashboard/Admin/AdminOverview";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
+import LessonsManagement from "../pages/Dashboard/Admin/LessonsManagement";
 
 // import AdminRoute from "./AdminRoute";
 
@@ -103,6 +104,10 @@ export const router = createBrowserRouter([
       {
         path: "admin/manage-users", 
         Component: ManageUsers
+      },
+      {
+        path: "admin/lesson-management",
+        Component: LessonsManagement
       }
     ]
   },
