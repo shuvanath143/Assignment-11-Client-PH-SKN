@@ -11,7 +11,7 @@ import {
   Line,
   ResponsiveContainer,
 } from "recharts";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const AdminOverview = () => {
   const [stats, setStats] = useState({
@@ -124,10 +124,13 @@ const AdminOverview = () => {
         <div className="bg-white shadow p-5 rounded-xl">
           <h2 className="font-bold text-lg mb-4">Most Active Contributors</h2>
           <ul>
-            {stats.topContributors.map((c, idx) => (
-              <li key={idx} className="flex justify-between py-1 border-b">
-                <span>{c.email}</span>
-                <span className="font-semibold">{c.count} Lessons</span>
+            {stats.topContributors.map((contributor, index) => (
+              <li key={index} className="flex justify-between py-1 border-b">
+                <span>{contributor.displayName}</span>
+                <span>{contributor.email}</span>
+                <span className="font-semibold">
+                  {contributor.count} Lessons
+                </span>
               </li>
             ))}
           </ul>

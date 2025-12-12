@@ -5,6 +5,8 @@ import { Link, useLocation, useNavigate } from "react-router";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import axios from "axios";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+import useAxios from "../../../hooks/useAxios";
 
 const Register = () => {
   const {
@@ -16,10 +18,17 @@ const Register = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const axiosSecure = useAxiosSecure()
+  const axiosInstance = useAxios()
 
-  const handleRegistration = (data) => {
-    // console.log(data);
-
+  const handleRegistration = async (data) => {
+    console.log(data);
+    const res = await axiosInstance.get(`/users/${data.email}`)
+    console.log(res)
+    if (res.data) {
+      Swal.fire("You are already registered. Please login!");
+      navigate('/login')
+      return
+    } 
     const profileImage = data.photo[0]
 
     registerUser(data.email, data.password)

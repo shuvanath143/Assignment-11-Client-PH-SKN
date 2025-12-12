@@ -1,10 +1,10 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../../hooks/useAuth";
 import axios from "axios";
-import usePremium from "../../hooks/usePremium";
+import usePremium from "../../../hooks/usePremium";
 
 const image_hosting_key = import.meta.env.VITE_image_host;
 const image_upload_url = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;

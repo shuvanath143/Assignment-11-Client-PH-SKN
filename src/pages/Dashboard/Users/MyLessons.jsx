@@ -1,9 +1,9 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useRef, useState } from 'react';
-import useAuth from '../../hooks/useAuth';
-import useAxiosSecure from '../../hooks/useAxiosSecure';
+import useAuth from '../../../hooks/useAuth';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
-import usePremium from '../../hooks/usePremium';
+import usePremium from '../../../hooks/usePremium';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
@@ -108,8 +108,6 @@ const MyLessons = () => {
       }
 
       queryClient.invalidateQueries(["my-lessons", user?.email]);
-
-      
 
     } 
     catch (err) {

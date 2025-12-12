@@ -3,20 +3,29 @@ import useAuth from "../../../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router";
 import SocialLogin from "../SocialLogin/SocialLogin";
+import useAxios from "../../../hooks/useAxios";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const { signInUser } = useAuth();
   const location = useLocation()
   const navigate = useNavigate()
-
+  const axiosInstance = useAxios()
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const handleLogin = (data) => {
+  const handleLogin = async (data) => {
     console.log("Form Data: ", data);
+    
+    const res = await axiosInstance.get(`/users/${data.email}`)
+    if (!res.data) {
+      Swal.fire("Only registered users can logged in. Please register fist!");
+      navigate('/register')
+      return
+    }  
     signInUser(data.email, data.password)
       .then((res) => {
         console.log(res.user);
