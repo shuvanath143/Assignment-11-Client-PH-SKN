@@ -14,6 +14,8 @@ import PaymentSuccess from "../pages/Pricing/PaymentSuccess";
 import PaymentCancelled from "../pages/Pricing/PaymentCancelled";
 import PublicLessons from "../pages/PublicLessons/PublicLessons";
 import MyLessons from "../pages/Dashboard/MyLessons";
+import AdminRoute from "./AdminRoute";
+import AdminOverview from "../pages/Dashboard/AdminOverview";
 
 // import AdminRoute from "./AdminRoute";
 
@@ -82,6 +84,14 @@ export const router = createBrowserRouter([
       {
         path: "my-lessons",
         Component: MyLessons,
+      },
+      {
+        path: "admin",
+        element: (
+          <AdminRoute>
+            <AdminOverview />
+          </AdminRoute>
+        ),
       },
     ],
   },
