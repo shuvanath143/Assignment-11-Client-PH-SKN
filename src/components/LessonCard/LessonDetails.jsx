@@ -128,6 +128,7 @@ const LessonDetails = () => {
 
         await axiosSecure.post("/lesson-reports", {
           lessonId: lesson._id,
+          author: lesson.creatorName,
           reporterUserId: user?.email,
           reason: selectedReason,
           timestamp: new Date(),
@@ -146,7 +147,7 @@ const LessonDetails = () => {
         <img
           src={lesson.featuredImageUrl}
           alt={lesson.title}
-          className={`w-full rounded-xl shadow-lg ${
+          className={`w-full object-contain h-[250px] md:h-[500px] rounded-xl shadow-lg ${
             premiumLocked ? "blur-md opacity-60" : ""
           }`}
         />

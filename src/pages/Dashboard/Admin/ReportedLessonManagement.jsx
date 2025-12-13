@@ -1,11 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useRef, useState } from 'react';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import Swal from 'sweetalert2';
 
 const ReportedLessonManagement = () => {
     const axiosSecure = useAxiosSecure()
     const [lesson, setLesson] = useState([])
     const detailsModalRef = useRef(null)
+    const queryClient = useQueryClient()
   
     const { data: reportedLessons = [] } = useQuery({
         queryKey: ['reported-lessons'],
@@ -31,6 +33,7 @@ const ReportedLessonManagement = () => {
         }
 
         allReportsByLesson[lessonId].reports.push({
+        _id: report._id,
         reporterUserId: report.reporterUserId,
         reason: report.reason,
         status: report.status,
@@ -53,23 +56,75 @@ const ReportedLessonManagement = () => {
       console.log('Data in lesson', data)
       setLesson(data)
       detailsModalRef.current.showModal();
+      queryClient.invalidateQueries(["reported-lessons"]);
     }
-    const handleIgnoreReport = async (lessonId, currStatus) => {
-      const newStatus = currStatus === 'pending' ? 'resolved' : 'pending'
+    const handleIgnoreReport = async (reportId, currStatus) => {
+      console.log('reportedid', reportId)
+      const newStatus = currStatus === "pending" ? "ignored" : "pending";
       const updatedDoc = {
-        status: newStatus
-      }
-      const res = await axiosSecure.patch(`/lesson-reports/${lessonId}/status`, updatedDoc);
+        status: newStatus,
+      };
+      if (currStatus === "pending") {
+        const res = await axiosSecure.patch(
+          `/lesson-reports/${reportId}/status`,
+          updatedDoc
+        );
+        console.log("report ignore status: ", res.data);
 
-      if (res.data.modifiedCount > 0) {
-        console.log('done')
-      }
+        if (res.data.modifiedCount > 0) {
+          console.log("done");
 
-    }
-    const handleDeleteReport = async (lessonId) => {
-      
-    }
+          Swal.fire({
+            icon: "success",
+            title: "Reviewed!",
+            text: "Report has been resolved.",
+            customClass: {
+              container: "swal-over-modal",
+              backdrop: "swal-over-modal",
+            },
+          });
+          setLesson((prev) => ({
+            ...prev,
+            reports: prev.reports.map((r) =>
+              r._id === reportId ? { ...r, status: newStatus } : r
+            ),
+          }));
+          queryClient.invalidateQueries(["reported-lessons"]);
+        }
+      } else {
+        Swal.fire("Pending!", "Try again later.", "error");
+      }
+    };
+
+    const handleDeleteReport = async (lessonId, reportId, currStatus) => {
+      if (currStatus !== 'Lesson Deleted') {
+        Swal.fire({
+        title: "Are you sure?",
+        text: "This will permanently delete the lesson!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await axiosSecure.delete(`/lessons/${lessonId}`);
+          const updatedDoc = {
+            status: "Lesson Deleted",
+          };
+          lesson.isDeleted = true
+          await axiosSecure.patch(`/lesson-reports/${reportId}/status`,updatedDoc);
+          Swal.fire("Deleted!", "Lesson has been removed.", "success");
+          queryClient.invalidateQueries(["reported-lessons"]);
+        }
+      });
+      }
+    };
     
+    const handleCloseModal = () => {
+      
+      detailsModalRef.current.close();
+      queryClient.invalidateQueries(["reported-lessons"]);
+                     
+    }
     
     return (
       <div className="p-6">
@@ -82,6 +137,7 @@ const ReportedLessonManagement = () => {
                 <th>#</th>
                 <th>Lesson</th>
                 <th>Category</th>
+                <th>Author</th>
                 <th>Report No.</th>
                 <th>Actions</th>
               </tr>
@@ -92,10 +148,13 @@ const ReportedLessonManagement = () => {
                 <tr key={lesson._id}>
                   <td>{index + 1}</td>
                   <td>
-                    <p className="font-semibold">{lesson.title}</p>
+                    <p className="font-semibold">{lesson.lessonTitle}</p>
                   </td>
                   <td>
-                    <p className="font-semibold">{lesson.category}</p>
+                    <p className="font-semibold">{lesson.lessonCategory}</p>
+                  </td>
+                  <td>
+                    <p className="font-semibold">{lesson.lessonCreator}</p>
                   </td>
                   <td>
                     <p className="font-semibold">
@@ -141,19 +200,31 @@ const ReportedLessonManagement = () => {
                         <td>{report.reporterUserId}</td>
                         <td>{report.reason}</td>
                         <td>{report.status}</td>
-                        <td>{report.timestamp}</td>
+                        <td>
+                          {new Date(report.timestamp).toLocaleDateString()}
+                        </td>
                         <td className="space-x-2">
                           <button
                             className="btn btn-sm btn-secondary"
+                            disabled={
+                              report.status !== "pending" ? true : false
+                            }
                             onClick={() =>
-                              handleIgnoreReport(lesson.lessonId, report.status)
+                              handleIgnoreReport(report._id, report.status)
                             }
                           >
                             Ignore
                           </button>
                           <button
-                            className="btn btn-sm btn-secondary"
-                            onClick={() => handleDeleteReport(lesson.lessonId)}
+                            className="btn btn-sm btn-warning"
+                            disabled={ lesson.isDeleted ? true : false }
+                            onClick={() =>
+                              handleDeleteReport(
+                                lesson.lessonId,
+                                report._id,
+                                report.status
+                              )
+                            }
                           >
                             Delete
                           </button>
@@ -162,6 +233,21 @@ const ReportedLessonManagement = () => {
                     ))}
                   </tbody>
                 </table>
+                {/* Modal Close Button */}
+                <div className="flex justify-center">
+                  <div className="modal-action">
+                    <form method="dialog">
+                      <button
+                        className="btn btn-accent"
+                        onClick={() => {
+                          handleCloseModal();
+                        }}
+                      >
+                        Close
+                      </button>
+                    </form>
+                  </div>
+                </div>
               </div>
             )}
           </dialog>
