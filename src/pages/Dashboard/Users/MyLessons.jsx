@@ -150,6 +150,7 @@ const MyLessons = () => {
               <th>Reactions</th>
               <th>Saves</th>
               <th>Created</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -199,6 +200,7 @@ const MyLessons = () => {
                 <td>{lesson.likesCount || 0}</td>
                 <td>{lesson.favoritesCount || 0}</td>
                 <td>{new Date(lesson.createdAt).toLocaleDateString()}</td>
+                <td>{lesson.isReviewed}</td>
                 <td className="space-x-2">
                   <button
                     className="btn btn-sm btn-secondary"

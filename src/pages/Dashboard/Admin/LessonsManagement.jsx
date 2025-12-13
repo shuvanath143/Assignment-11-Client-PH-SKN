@@ -39,6 +39,17 @@ const LessonsManagement = () => {
     queryClient.invalidateQueries(["admin-lessons"]);
   };
 
+  // Review Lesson and Grant Access
+  const handleReviewLesson = async (id, isReviewed) => {
+    const reviewStatus = isReviewed === "pending" ? "reviewed" : "pending";
+    const updatedDoc = {
+      isReviewed: reviewStatus,
+    };
+    const res = await axiosSecure.patch(`/reviewed/lessons/${id}`, updatedDoc);
+    console.log(res)
+    queryClient.invalidateQueries(["admin-lessons"]);
+  }
+
   // Delete lesson
   const handleDelete = (id) => {
     Swal.fire({
@@ -72,7 +83,8 @@ const LessonsManagement = () => {
               <th>Lesson</th>
               <th>Creator</th>
               <th>Visibility</th>
-              <th>Access</th>
+              <th>Public Access</th>
+              <th>Reviewed</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -120,6 +132,19 @@ const LessonsManagement = () => {
                     }`}
                   >
                     {lesson.accessLevel}
+                  </button>
+                </td>
+
+                <td>
+                  <button
+                    onClick={() => handleReviewLesson(lesson._id, lesson.isReviewed)}
+                    className={`btn btn-sm btn-outline ${
+                      lesson.isReviewed === "pending"
+                        ? "btn-info"
+                        : "btn-secondary"
+                    }`}
+                  >
+                    {lesson.isReviewed}
                   </button>
                 </td>
 

@@ -60,6 +60,8 @@ const AddLesson = () => {
         creatorEmail: user.email,
         creatorName: user.displayName,
         creatorPhoto: user.photoURL,
+        isReviewed: 'pending',
+        isFeatured: 'no',
         likes: [],
         likesCount: 0,
         favorites: [],

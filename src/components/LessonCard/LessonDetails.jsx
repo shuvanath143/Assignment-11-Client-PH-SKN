@@ -63,14 +63,15 @@ const LessonDetails = () => {
 
   // Similar lessons
   const { data: similarLessons = [] } = useQuery({
-    queryKey: ["similarLessons", lesson?.category],
+    queryKey: ["similarLessons", lesson?.category, id],
     queryFn: async () => {
       const res = await axiosInstance.get(
-        `/lessons?category=${lesson.category}`
+        `/lessons?category=${lesson.category}&id=${id}`
       );
+      console.log('similar', res.data)
       return res.data.slice(0, 6);
     },
-    enabled: !!lesson?.category,
+    enabled: !!lesson?.category && !!id,
   });
 
   if (isLessonLoading) return <p className="text-center py-20">Loading...</p>;
@@ -79,7 +80,7 @@ const LessonDetails = () => {
       <p className="text-center py-20 text-red-600">Error loading lesson.</p>
     );
   if (!lesson) return <p className="text-center py-20">Lesson not found.</p>;
-
+    console.log("similar", similarLessons);
   const premiumLocked = lesson.accessLevel === "premium" && !isPremium;
 
   const handleLike = async () => {
