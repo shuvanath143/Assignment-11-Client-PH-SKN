@@ -18,6 +18,7 @@ import AdminRoute from "./AdminRoute";
 import AdminOverview from "../pages/Dashboard/Admin/AdminOverview";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 import LessonsManagement from "../pages/Dashboard/Admin/LessonsManagement";
+import ReportedLessonManagement from "../pages/Dashboard/Admin/ReportedLessonManagement";
 
 // import AdminRoute from "./AdminRoute";
 
@@ -108,6 +109,10 @@ export const router = createBrowserRouter([
       {
         path: "admin/lesson-management",
         Component: LessonsManagement
+      },
+      {
+        path: "admin/report-management",
+        Component: ReportedLessonManagement
       }
     ]
   },
