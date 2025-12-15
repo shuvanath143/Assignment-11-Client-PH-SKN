@@ -134,7 +134,7 @@ const Home = ({ user }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {lessons
-            .filter((l) => l.accessLevel === "free")
+            .filter((l) => l.isFeatured === "yes")
             .slice(0, 3)
             .map((lesson) => (
               <LessonCard

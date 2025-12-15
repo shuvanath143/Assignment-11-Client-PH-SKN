@@ -19,6 +19,8 @@ import AdminOverview from "../pages/Dashboard/Admin/AdminOverview";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 import LessonsManagement from "../pages/Dashboard/Admin/LessonsManagement";
 import ReportedLessonManagement from "../pages/Dashboard/Admin/ReportedLessonManagement";
+import MyFavorites from "../pages/Dashboard/Users/MyFavorites";
+import Profile from "../pages/Dashboard/Users/Profile";
 
 // import AdminRoute from "./AdminRoute";
 
@@ -88,6 +90,14 @@ export const router = createBrowserRouter([
         path: "my-lessons",
         Component: MyLessons,
       },
+      {
+        path: "my-favorites",
+        Component: MyFavorites
+      },
+      {
+        path: 'profile',
+        Component: Profile
+      }
     ],
   },
   {
