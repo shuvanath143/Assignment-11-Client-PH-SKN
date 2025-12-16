@@ -5,7 +5,7 @@ import {
   FaRegHeart,
   FaBookmark,
   FaRegBookmark,
-  FaFlag,
+  FaFlag
 } from "react-icons/fa";
 import {
   FacebookShareButton,
@@ -25,51 +25,57 @@ import useAxios from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
 import usePremium from "../../hooks/usePremium";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import Loading from "../Loading/Loading";
-import { useEffect, useState } from "react";
+import Loading from '../Loading/Loading'
+import { useState } from "react";
 
-const limit = 5;
+const limit = 5
 const LessonDetails = () => {
   const { user, loading } = useAuth();
   const { id } = useParams();
   const { isPremium } = usePremium();
-  const [skip, setSkip] = useState(0);
+  const [skip, setSkip] = useState(0)
   const [commentText, setCommentText] = useState("");
   const [allComments, setAllComments] = useState([]);
-
+  
   const navigate = useNavigate();
 
   const axiosInstance = useAxios();
   const axiosSecure = useAxiosSecure();
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   // Fetch lesson
-  const { data: lesson, isLoading: isLessonLoading } = useQuery({
+  const {
+    data: lesson,
+    isLoading: isLessonLoading,
+  } = useQuery({
     queryKey: ["lesson", id],
     queryFn: async () => {
       const res = await axiosSecure.get(`/lessons/${id}`);
+      console.data("in query", lesson)
       return res.data;
     },
-    enabled: !!id && !loading,
+    enabled: !!id && !Loading,
   });
 
-  // Fetch favorite lessons
+  // Fetch favorite lessons (only if user logged in)
   const { data: favoriteLessons = [], refetch: favoriteRefetch } = useQuery({
     queryKey: ["favoriteLessons", user?.email],
     queryFn: async () => {
-      if (!user?.email) return [];
       const { data } = await axiosSecure.get(
-        `/favorite/lesson?email=${user?.email}`
+        `/lessons/favorite?email=${user?.email}`
       );
-      return data;
+      return data; // returns only array: ["id1", "id2"]
     },
     enabled: !!user?.email,
   });
 
   const liked = user ? lesson?.likes?.includes(user.email) : false;
-  console.log(id)
-  const favorite = user ? favoriteLessons?.includes(id?.toString()) : false;
-  console.log("Favoritelessons & Favorite:", favoriteLessons, favorite);
+  // console.log("favoriteLessons", favoriteLessons)
+  // console.log(id.toString())
+  const favorite = user
+    ? favoriteLessons?.includes(id?.toString())
+    : false;
+    console.log("Favoritelessons & Favorite:" ,favoriteLessons, favorite)
 
   // Similar lessons
   const { data: similarLessons = [] } = useQuery({
@@ -78,69 +84,79 @@ const LessonDetails = () => {
       const res = await axiosInstance.get(
         `/lessons?category=${lesson.category}&id=${id}`
       );
+      // console.log('similar', res.data)
       return res.data.slice(0, 6);
     },
     enabled: !!lesson?.category && !!id,
   });
 
-  // Comments
   const { data: comments = [], isLoading: isCommentLoading } = useQuery({
     queryKey: ["comments", id, limit, skip],
     queryFn: async () => {
-      if (!id) return { comments: [], totalCount: 0 };
       const res = await axiosInstance.get(
         `/comments?lessonId=${id}&skip=${skip}&limit=${limit}`
       );
-      console.log("comments",res.data)
-    //   setAllComments(res.data.comments)
+      console.log(res.data)
+      // if (skip === 0) {
+      //   setAllComments(res.data.comments)
+      // }
+      // else setAllComments((prev) => [...prev, ...res.data.comments])
       return res.data;
     },
     enabled: !!id,
     keepPreviousData: true,
-    // onSuccess: (data) => {
-    //   if (skip === 0) {
-    //     console.log('comments as',data.comments)
-    //     setAllComments(data.comments || []);
-    //   } else {
-    //     setAllComments((prev) => [...prev, ...(data.comments || [])]);
-    //   }
-    // },
-  });
-  useEffect(() => {
-    if (comments?.comments) {
+    // keepPreviousData: true,
+    onSuccess: (comments) => {
       if (skip === 0) {
         setAllComments(comments.comments);
       } else {
         setAllComments((prev) => [...prev, ...comments.comments]);
       }
-    }
-  }, [comments, skip]);
+    },
+  });
+
+  // useEffect(() => {
+  //   if (!comments) return;
+
+  //   if (skip == 0) {
+  //     setAllComments(comments.comments);
+  //   } else {
+  //     setAllComments((prev) => [...prev, ...comments.comments]);
+  //   }
+  // }, [comments, skip]);
 
   const totalCount = comments?.totalCount || 0;
+  console.log(allComments)
   const hasMore = allComments.length < totalCount;
+  console.log(totalCount, comments)
 
-  if (loading || isLessonLoading) return <Loading />;
-  if (!lesson) return <p className="text-center py-20">Lesson not found.</p>;
-
-  const premiumLocked = lesson.accessLevel === "premium" && !isPremium;
+  // if (isLessonLoading) return <Loading />
+  // if (lessonError)
+  //   return (
+  //     <p className="text-center py-20 text-red-600">Error loading lesson.</p>
+  //   );
+  // if (!lesson) return <p className="text-center py-20">Lesson not found.</p>;
+    // console.log("similar", similarLessons);
+    console.log("now:", lesson)
+  
   const shareUrl = `${window.location.origin}/lessons/${id}`;
   const shareTitle = lesson?.title;
 
-  // Actions
   const handleLike = async () => {
     if (!user) return navigate("/login");
     await axiosSecure.patch(`/lessons/like/${lesson._id}?email=${user.email}`);
-    queryClient.invalidateQueries(["lesson", id]);
+    lessonRefetch();
   };
 
   const handleFavorite = async (lessonId) => {
+    // console.log(lessonId)
     if (!user) return navigate("/login");
     await axiosSecure.patch(
       `/lessons/favorite/${lessonId}?email=${user.email}`
     );
     queryClient.invalidateQueries(["favoriteLessons"]);
-    queryClient.invalidateQueries(["lesson", id]);
-    favoriteRefetch()
+    queryClient.invalidateQueries(["lesson"]);
+    favoriteRefetch();
   };
 
   const handleReport = () => {
@@ -169,6 +185,7 @@ const LessonDetails = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const selectedReason = result.value;
+
         await axiosSecure.post("/lesson-reports", {
           lessonId: lesson._id,
           author: lesson.creatorName,
@@ -197,10 +214,14 @@ const LessonDetails = () => {
 
     setCommentText("");
     setSkip(0);
-    // setAllComments([]);
+    setAllComments([]);
     queryClient.invalidateQueries(["comments", id]);
+    queryClient.invalidateQueries(["lesson", id]);
   };
-
+  queryClient.invalidateQueries(["lesson", id]);
+  if (loading || isLessonLoading) return <Loading />;
+  if (!lesson) return <p>Lesson not found</p>;
+  const premiumLocked = lesson.accessLevel === "premium" && !isPremium;
   return (
     <div className="max-w-5xl mx-auto px-4 py-12">
       {/* Thumbnail */}
@@ -326,7 +347,7 @@ const LessonDetails = () => {
         </div>
 
         {/* Comment Section */}
-        <div className="p-5 border rounded-xl shadow-sm flex flex-col gap-4 bg-gray-50 mb-10">
+        <div className="p-5 border rounded-xl shadow-sm flex items-center gap-4 bg-gray-50 mb-10">
           <h2 className="text-xl font-bold mb-6">Comments ({totalCount})</h2>
           {user ? (
             <form onSubmit={handleSubmit} className="mb-8">
