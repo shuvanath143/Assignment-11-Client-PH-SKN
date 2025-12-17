@@ -36,6 +36,7 @@ const LessonDetails = () => {
   const [skip, setSkip] = useState(0);
   const [commentText, setCommentText] = useState("");
   const [allComments, setAllComments] = useState([]);
+  const [creatorEmail, setCreatorEmail] = useState("");
 
   const navigate = useNavigate();
 
@@ -48,6 +49,8 @@ const LessonDetails = () => {
     queryKey: ["lesson", id],
     queryFn: async () => {
       const res = await axiosSecure.get(`/lessons/${id}`);
+      // console.log('lessoncrator', res.data.creatorEmail)
+      setCreatorEmail(res.data.creatorEmail);
       return res.data;
     },
     enabled: !!id && !loading,
@@ -69,7 +72,7 @@ const LessonDetails = () => {
   const liked = user ? lesson?.likes?.includes(user.email) : false;
   console.log(id)
   const favorite = user ? favoriteLessons?.includes(id?.toString()) : false;
-  console.log("Favoritelessons & Favorite:", favoriteLessons, favorite);
+  // console.log("Favoritelessons & Favorite:", favoriteLessons, favorite);
 
   // Similar lessons
   const { data: similarLessons = [] } = useQuery({
@@ -106,6 +109,15 @@ const LessonDetails = () => {
     //   }
     // },
   });
+
+  const { data: creatorLessonCount } = useQuery({
+    queryKey: ['creator-totalLessons', creatorEmail],
+    queryFn: async () => {
+      console.log('inside email', creatorEmail)
+      const res = await axiosSecure(`/totalLessons/user/${creatorEmail}`);
+      return res.data
+    }
+  })
   useEffect(() => {
     if (comments?.comments) {
       if (skip === 0) {
@@ -250,7 +262,7 @@ const LessonDetails = () => {
           <div>
             <h3 className="text-xl font-bold">{lesson.creatorName}</h3>
             <p className="text-gray-600">
-              Total Lessons: {lesson.creatorLessonsCount}
+              Total Lessons: {creatorLessonCount}
             </p>
           </div>
         </div>

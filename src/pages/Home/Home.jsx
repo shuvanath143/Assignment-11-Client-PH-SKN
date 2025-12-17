@@ -118,11 +118,13 @@ const Home = ({ user }) => {
         <p className="text-center text-gray-500 py-12">No lessons found.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {filtered.map((lesson) => (
-            <LessonCard
-              key={lesson._id}
-              lesson={lesson}
-              isPremium={isPremium}
+          {filtered
+            .filter((l) => l.isReviewed === 'reviewed')
+            .map((lesson) => (
+              <LessonCard
+                key={lesson._id}
+                lesson={lesson}
+                isPremium={isPremium}
             />
           ))}
         </div>
