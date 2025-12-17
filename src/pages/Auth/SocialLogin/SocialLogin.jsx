@@ -29,10 +29,17 @@ const SocialLogin = () => {
     }
 
     return (
-      <div className='text-center mb-5 space-y-3'>
-        <p>Or</p>
+      <div className="text-center mb-5 space-y-3">
+        <div className="px-8 flex items-center gap-3">
+          <div className="flex-1 h-px bg-gray-300 dark:bg-gray-700" />
+          <span className="text-sm text-gray-500">OR</span>
+          <div className="flex-1 h-px bg-gray-300 dark:bg-gray-700" />
+        </div>
         {/* Google */}
-        <button onClick={handleGoogleSignIn} className="btn bg-white text-black border-[#e5e5e5]">
+        <button
+          onClick={handleGoogleSignIn}
+          className="btn bg-white text-black border-[#e5e5e5]"
+        >
           <svg
             aria-label="Google logo"
             width="16"

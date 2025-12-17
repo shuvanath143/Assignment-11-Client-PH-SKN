@@ -22,7 +22,7 @@ const Register = () => {
 
   const handleRegistration = async (data) => {
     console.log(data);
-    const res = await axiosInstance.get(`/users/${data.email}`)
+    const res = await axiosInstance.get(`/checkUsers/${data.email}`)
     console.log(res)
     if (res.data) {
       Swal.fire("You are already registered. Please login!");

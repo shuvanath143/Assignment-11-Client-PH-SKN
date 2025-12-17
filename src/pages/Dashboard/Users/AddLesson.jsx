@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import useAuth from "../../../hooks/useAuth";
 import axios from "axios";
 import usePremium from "../../../hooks/usePremium";
+import Lottie from "lottie-react";
+import successAnimation from "../../../assets/lottie/success.json";
 
 const image_hosting_key = import.meta.env.VITE_image_host;
 const image_upload_url = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -15,6 +17,7 @@ const AddLesson = () => {
   const isPremiumUser = usePremium()
   console.log(isPremiumUser.isPremium)
 
+  const [showLottie, setShowLottie] = useState(false);
   // const [isPremiumUser] = useState(user?.isPremium || false);
 
   const {
@@ -75,6 +78,8 @@ const AddLesson = () => {
       const res = await axiosSecure.post("/lessons", lessonInfo);
 
       if (res.data.insertedId) {
+        setShowLottie(true); // show Lottie animation
+        setTimeout(() => setShowLottie(false), 5000); // hide after 2s
         Swal.fire({
           icon: "success",
           title: "Lesson Added Successfully!",
@@ -93,7 +98,12 @@ const AddLesson = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg relative">
+      {showLottie && (
+        <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50">
+          <Lottie animationData={successAnimation} loop={false} />
+        </div>
+      )}
       <h2 className="text-2xl font-bold mb-4">Add New Lesson</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
