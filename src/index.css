@@ -1,21 +1,53 @@
-@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@100..900&display=swap');
 
 @import "tailwindcss";
-@plugin "daisyui" {
-  themes: light --default, dark --prefersdark;
-};
+@plugin "daisyui";
 
+/* 🌞 Light Theme - Dynamic & Eye-catching */
 @plugin "daisyui/theme" {
   name: "light";
   default: true;
-  --color-primary: #CAEB66;
-  --color-secondary: #03373D;
+
+  /* Primary colors */
+  --color-primary: #3B82F6;       /* Bright blue - attention grabbing */
+  --color-primary-focus: #2563EB; /* Slightly darker for hover */
+  --color-primary-content: #FFFFFF; /* Text on primary buttons */
+
+  /* Secondary colors */
+  --color-secondary: #F59E0B;      /* Vibrant amber / gold */
+  --color-secondary-focus: #D97706; 
+  --color-secondary-content: #1C1C1C;
+
+  /* Base / surface layers */
+  --color-base-100: #FFFFFF;      /* Pure white for clean surfaces */
+  --color-base-200: #F3F4F6;      /* Light gray for cards / panels */
+  --color-base-300: #E5E7EB;      /* Slightly darker gray for secondary surfaces */
+  --color-base-content: #111827;  /* Dark gray text for readability */
+
+  /* Accent / feedback */
+  --color-accent: #10B981;        /* Green for success / highlights */
+  --color-accent-content: #FFFFFF;
+
+  --color-info: #0EA5E9;          /* Sky-blue for info */
+  --color-success: #22C55E;       /* Vibrant green */
+  --color-warning: #FBBF24;       /* Amber warning */
+  --color-error: #EF4444;         /* Red error */
+}
+
+/* 🌙 Dark Theme (unchanged) */
+@plugin "daisyui/theme" {
+  name: "dark";
+
+  --color-primary: #A3E635;     /* neon-lime but soft */
+  --color-secondary: #7DD3FC;   /* sky-blue accent */
+  --color-base-100: #0F172A;    /* slate-900 */
+  --color-base-200: #020617;    /* slate-950 */
+  --color-base-300: #020617;
+  --color-base-content: #E5E7EB; /* gray-200 */
 }
 
 body {
   font-family: "Urbanist", sans-serif;
-  font-optical-sizing: auto;
-  font-style: normal;
 }
 
 .swal-over-modal {

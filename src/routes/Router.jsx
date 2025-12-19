@@ -21,6 +21,7 @@ import LessonsManagement from "../pages/Dashboard/Admin/LessonsManagement";
 import ReportedLessonManagement from "../pages/Dashboard/Admin/ReportedLessonManagement";
 import MyFavorites from "../pages/Dashboard/Users/MyFavorites";
 import Profile from "../pages/Dashboard/Users/Profile";
+import UserDashboard from "../pages/Dashboard/Users/UserDashboard";
 
 // import AdminRoute from "./AdminRoute";
 
@@ -71,13 +72,17 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "dashboard",
+    path: "/",
     element: (
       <PrivateRoute>
         <DashboardLayout />
       </PrivateRoute>
     ),
     children: [
+      {
+        path: "dashboard",
+        Component: UserDashboard,
+      },
       {
         path: "add-lesson",
         Component: AddLesson,

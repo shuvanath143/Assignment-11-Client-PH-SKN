@@ -91,7 +91,7 @@ const Login = () => {
           </motion.button>
         </fieldset>
         <p>
-          New to ZapShift? Please{" "}
+          New to Digital Life Lessons? Please{" "}
           <Link
             state={location?.state}
             to="/register"

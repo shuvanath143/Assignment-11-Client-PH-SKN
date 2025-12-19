@@ -39,7 +39,6 @@ const LessonDetails = () => {
   const [creatorEmail, setCreatorEmail] = useState("");
 
   const navigate = useNavigate();
-
   const axiosInstance = useAxios();
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
@@ -49,14 +48,13 @@ const LessonDetails = () => {
     queryKey: ["lesson", id],
     queryFn: async () => {
       const res = await axiosSecure.get(`/lessons/${id}`);
-      // console.log('lessoncrator', res.data.creatorEmail)
       setCreatorEmail(res.data.creatorEmail);
       return res.data;
     },
     enabled: !!id && !loading,
   });
 
-  // Fetch favorite lessons
+  // Favorite lessons
   const { data: favoriteLessons = [], refetch: favoriteRefetch } = useQuery({
     queryKey: ["favoriteLessons", user?.email],
     queryFn: async () => {
@@ -70,9 +68,7 @@ const LessonDetails = () => {
   });
 
   const liked = user ? lesson?.likes?.includes(user.email) : false;
-  console.log(id)
   const favorite = user ? favoriteLessons?.includes(id?.toString()) : false;
-  // console.log("Favoritelessons & Favorite:", favoriteLessons, favorite);
 
   // Similar lessons
   const { data: similarLessons = [] } = useQuery({
@@ -94,30 +90,20 @@ const LessonDetails = () => {
       const res = await axiosInstance.get(
         `/comments?lessonId=${id}&skip=${skip}&limit=${limit}`
       );
-      console.log("comments",res.data)
-    //   setAllComments(res.data.comments)
       return res.data;
     },
     enabled: !!id,
     keepPreviousData: true,
-    // onSuccess: (data) => {
-    //   if (skip === 0) {
-    //     console.log('comments as',data.comments)
-    //     setAllComments(data.comments || []);
-    //   } else {
-    //     setAllComments((prev) => [...prev, ...(data.comments || [])]);
-    //   }
-    // },
   });
 
   const { data: creatorLessonCount } = useQuery({
-    queryKey: ['creator-totalLessons', creatorEmail],
+    queryKey: ["creator-totalLessons", creatorEmail],
     queryFn: async () => {
-      console.log('inside email', creatorEmail)
       const res = await axiosSecure(`/totalLessons/user/${creatorEmail}`);
-      return res.data
-    }
-  })
+      return res.data;
+    },
+  });
+
   useEffect(() => {
     if (comments?.comments) {
       if (skip === 0) {
@@ -132,7 +118,10 @@ const LessonDetails = () => {
   const hasMore = allComments.length < totalCount;
 
   if (loading || isLessonLoading) return <Loading />;
-  if (!lesson) return <p className="text-center py-20">Lesson not found.</p>;
+  if (!lesson)
+    return (
+      <p className="text-center py-20 text-base-content">Lesson not found.</p>
+    );
 
   const premiumLocked = lesson.accessLevel === "premium" && !isPremium;
   const shareUrl = `${window.location.origin}/lessons/${id}`;
@@ -148,11 +137,11 @@ const LessonDetails = () => {
   const handleFavorite = async (lessonId) => {
     if (!user) return navigate("/login");
     await axiosSecure.patch(
-      `/lessons/favorite/${lessonId}?email=${user.email}`
+      `/lessons/favorite/${lessonId}?email=${user?.email}`
     );
     queryClient.invalidateQueries(["favoriteLessons"]);
     queryClient.invalidateQueries(["lesson", id]);
-    favoriteRefetch()
+    favoriteRefetch();
   };
 
   const handleReport = () => {
@@ -209,7 +198,6 @@ const LessonDetails = () => {
 
     setCommentText("");
     setSkip(0);
-    // setAllComments([]);
     queryClient.invalidateQueries(["comments", id]);
   };
 
@@ -225,13 +213,15 @@ const LessonDetails = () => {
           }`}
         />
         {premiumLocked && (
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-md flex flex-col items-center justify-center text-white rounded-xl">
+          <div className="absolute inset-0 bg-base-100/60 backdrop-blur-md flex flex-col items-center justify-center text-base-content rounded-xl">
             <FaLock className="text-5xl mb-3" />
             <p className="text-lg font-semibold">Premium Content</p>
-            <p className="mb-4 text-sm">Upgrade to unlock full access.</p>
+            <p className="mb-4 text-base-content/80">
+              Upgrade to unlock full access.
+            </p>
             <Link
               to="/pricing"
-              className="bg-yellow-500 px-6 py-2 rounded-lg font-bold text-black"
+              className="bg-primary px-6 py-2 rounded-lg font-bold text-white hover:bg-primary-focus"
             >
               Upgrade Now
             </Link>
@@ -241,34 +231,36 @@ const LessonDetails = () => {
 
       {/* CONTENT */}
       <div className={`${premiumLocked ? "blur-sm select-none" : "mt-10"}`}>
-        <h1 className="text-4xl font-bold mb-4">{lesson.title}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-primary">{lesson.title}</h1>
         <div className="flex gap-4 mb-6">
-          <span className="px-3 py-1 bg-gray-200 rounded-full text-sm font-semibold">
+          <span className="px-3 py-1 bg-base-200 text-base-content rounded-full text-sm font-semibold">
             {lesson.category}
           </span>
         </div>
 
-        <p className="text-lg text-gray-700 leading-relaxed mb-10">
+        <p className="text-base-content/80 text-lg leading-relaxed mb-10">
           {lesson.fullDescription}
         </p>
 
         {/* Author */}
-        <div className="p-5 border rounded-xl shadow-sm flex items-center gap-4 bg-gray-50 mb-10">
+        <div className="p-5 border border-base-200 rounded-xl shadow-sm flex items-center gap-4 bg-base-100 mb-10">
           <img
             src={lesson.creatorPhoto}
             className="w-16 h-16 rounded-full object-cover"
             alt="Author"
           />
           <div>
-            <h3 className="text-xl font-bold">{lesson.creatorName}</h3>
-            <p className="text-gray-600">
+            <h3 className="text-xl font-bold text-primary">
+              {lesson.creatorName}
+            </h3>
+            <p className="text-base-content/70">
               Total Lessons: {creatorLessonCount}
             </p>
           </div>
         </div>
 
         {/* Likes & Saves */}
-        <div className="flex items-center gap-6 text-lg mb-10">
+        <div className="flex items-center gap-6 text-base-content/80 mb-10">
           <p className="flex items-center gap-2">
             ❤ {lesson.likes?.length || 0} Likes
           </p>
@@ -280,7 +272,7 @@ const LessonDetails = () => {
         {/* Share Section */}
         {lesson.visibility === "public" && (
           <div className="flex items-center gap-3 mb-12">
-            <span className="font-semibold text-gray-700">Share:</span>
+            <span className="font-semibold text-base-content">Share:</span>
 
             <FacebookShareButton url={shareUrl} quote={shareTitle}>
               <FacebookIcon size={32} round />
@@ -297,6 +289,7 @@ const LessonDetails = () => {
             <WhatsappShareButton url={shareUrl} title={shareTitle}>
               <WhatsappIcon size={32} round />
             </WhatsappShareButton>
+
             <button
               onClick={() => {
                 navigator.clipboard.writeText(shareUrl);
@@ -306,7 +299,7 @@ const LessonDetails = () => {
                   "success"
                 );
               }}
-              className="px-3 py-1 text-sm bg-gray-200 rounded hover:bg-gray-300"
+              className="px-3 py-1 text-sm bg-base-200 text-base-content rounded hover:bg-base-300"
             >
               Copy Link
             </button>
@@ -317,60 +310,64 @@ const LessonDetails = () => {
         <div className="flex gap-4 mb-16">
           <button
             onClick={() => handleFavorite(lesson._id)}
-            className="px-5 py-2 bg-gray-200 rounded-lg flex items-center gap-2 hover:bg-gray-300"
+            className="px-5 py-2 bg-base-200 text-base-content rounded-lg flex items-center gap-2 hover:bg-base-300"
           >
             {favorite ? <FaBookmark /> : <FaRegBookmark />} Save
           </button>
 
           <button
             onClick={handleLike}
-            className="px-5 py-2 bg-gray-200 rounded-lg flex items-center gap-2 hover:bg-gray-300"
+            className="px-5 py-2 bg-base-200 text-base-content rounded-lg flex items-center gap-2 hover:bg-base-300"
           >
             {liked ? <FaHeart className="text-red-500" /> : <FaRegHeart />} Like
           </button>
 
           <button
             onClick={handleReport}
-            className="px-5 py-2 bg-gray-200 rounded-lg flex items-center gap-2 hover:bg-gray-300"
+            className="px-5 py-2 bg-base-200 text-base-content rounded-lg flex items-center gap-2 hover:bg-base-300"
           >
             <FaFlag /> Report
           </button>
         </div>
 
         {/* Comment Section */}
-        <div className="p-5 border rounded-xl shadow-sm flex flex-col gap-4 bg-gray-50 mb-10">
-          <h2 className="text-xl font-bold mb-6">Comments ({totalCount})</h2>
+        <div className="p-5 border border-base-200 rounded-xl shadow-sm flex flex-col gap-4 bg-base-100 mb-10">
+          <h2 className="text-xl font-bold mb-6 text-primary">
+            Comments ({totalCount})
+          </h2>
           {user ? (
             <form onSubmit={handleSubmit} className="mb-8">
               <textarea
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
                 placeholder="Write your comment..."
-                className="w-full border rounded-lg p-4"
+                className="w-full border border-base-200 rounded-lg p-4 bg-base-100 text-base-content"
                 rows={4}
               />
               <button
                 type="submit"
-                className="mt-3 px-6 py-2 bg-black text-white rounded-lg"
+                className="mt-3 px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-focus"
               >
                 Post Comment
               </button>
             </form>
           ) : (
-            <p className="text-gray-600 mb-8">Please log in to comment.</p>
+            <p className="text-base-content/70 mb-8">
+              Please log in to comment.
+            </p>
           )}
 
           {/* Comments */}
           {isCommentLoading && skip === 0 ? (
             <p>Loading comments...</p>
           ) : allComments.length === 0 ? (
-            <p className="text-gray-500">No comments yet.</p>
+            <p className="text-base-content/70">No comments yet.</p>
           ) : (
             <div className="space-y-6">
               {allComments.map((comment) => (
                 <div
                   key={comment._id}
-                  className="p-4 border rounded-xl bg-gray-50"
+                  className="p-4 border border-base-200 rounded-xl bg-base-100"
                 >
                   <div className="flex items-center gap-3 mb-2">
                     <img
@@ -379,13 +376,15 @@ const LessonDetails = () => {
                       className="w-10 h-10 rounded-full"
                     />
                     <div>
-                      <p className="font-semibold">{comment.userName}</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="font-semibold text-primary">
+                        {comment.userName}
+                      </p>
+                      <p className="text-xs text-base-content/60">
                         {new Date(comment.createdAt).toLocaleString()}
                       </p>
                     </div>
                   </div>
-                  <p className="text-gray-700">{comment.comment}</p>
+                  <p className="text-base-content">{comment.comment}</p>
                 </div>
               ))}
             </div>
@@ -396,7 +395,7 @@ const LessonDetails = () => {
             <div className="text-center mt-8">
               <button
                 onClick={() => setSkip((prev) => prev + limit)}
-                className="px-6 py-2 border rounded-lg hover:bg-gray-100"
+                className="px-6 py-2 border border-base-200 rounded-lg hover:bg-base-300"
               >
                 See more comments
               </button>
@@ -406,7 +405,9 @@ const LessonDetails = () => {
 
         {/* Similar Lessons */}
         <div className="mt-12">
-          <h2 className="text-2xl font-bold mb-6">Similar Lessons</h2>
+          <h2 className="text-2xl font-bold mb-6 text-primary">
+            Similar Lessons
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {similarLessons.map((lesson) => (
               <LessonCard

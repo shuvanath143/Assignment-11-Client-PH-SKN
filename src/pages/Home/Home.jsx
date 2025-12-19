@@ -119,14 +119,14 @@ const Home = ({ user }) => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {filtered
-            .filter((l) => l.isReviewed === 'reviewed')
+            .filter((l) => l.isReviewed === "reviewed")
             .map((lesson) => (
               <LessonCard
                 key={lesson._id}
                 lesson={lesson}
                 isPremium={isPremium}
-            />
-          ))}
+              />
+            ))}
         </div>
       )}
 

@@ -80,7 +80,7 @@ const Register = () => {
   return (
     <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl">
       <h3 className="text-3xl font-semibold text-center">
-        Welcome to ZapShift
+        Welcome to Digital Life Lessons
       </h3>
       <p className="text-center">Please Register</p>
       <form onSubmit={handleSubmit(handleRegistration)} className="card-body">
