@@ -260,20 +260,18 @@ const Navbar = () => {
         </NavLink>
 
         <NavLink
-          to="/add-lesson"
-          className={({ isActive }) => (isActive ? activeClass : normalClass)}
-        >
-          Add Lesson
-        </NavLink>
-
-        {user && (
-          <NavLink
             to="/public-lessons"
             className={({ isActive }) => (isActive ? activeClass : normalClass)}
           >
             Public Lesson
           </NavLink>
-        )}
+
+        <NavLink
+          to="/dashboard/add-lesson"
+          className={({ isActive }) => (isActive ? activeClass : normalClass)}
+        >
+          Add Lesson
+        </NavLink>
 
         {/* Pricing / Premium */}
         {user &&
@@ -316,7 +314,7 @@ const Navbar = () => {
                          transition-all duration-200 z-50 bg-base-200 border border-base-300"
             >
               <NavLink
-                to="/dashboard"
+                to="/dashboard/user"
                 className="block px-4 py-2 hover:bg-base-300 text-base-content"
               >
                 Overview
@@ -403,6 +401,7 @@ const Navbar = () => {
                   {user.displayName || "Anonymous User"}
                 </h3>
                 <p className="text-sm text-base-content">{user.email}</p>
+                <NavLink to="/dashboard/profile" className="btn btn-primary">View Profile</NavLink>
                 <button
                   onClick={logout}
                   className="btn btn-sm btn-error mt-3 text-white bg-error hover:bg-error-focus"

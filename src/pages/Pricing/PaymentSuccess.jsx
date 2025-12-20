@@ -53,7 +53,7 @@ const PaymentSuccess = () => {
     if (!sessionId || called.current) return;
     called.current = true;
     console.log(sessionId)
-    axiosSecure.get(`/payment-success?session_id=${sessionId}`).then((res) => {
+    axiosSecure.patch(`/payment-success?session_id=${sessionId}`).then((res) => {
       console.log(res.data)
       setPaymentInfo(res.data.paymentInfo);
     });

@@ -72,7 +72,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/",
+    path: "dashboard",
     element: (
       <PrivateRoute>
         <DashboardLayout />
@@ -80,7 +80,7 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "dashboard",
+        path: "user",
         Component: UserDashboard,
       },
       {

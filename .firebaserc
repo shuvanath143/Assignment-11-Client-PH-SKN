@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "digital-life-lessons-skn143"
-  }
+    "default": "digital-life-lessons-skn143",
+    "production": "digital-life-lessons-skn143"
+  },
+  "targets": {},
+  "etags": {}
 }

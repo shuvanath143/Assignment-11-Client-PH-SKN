@@ -64,7 +64,7 @@ const DashboardLayout = () => {
                 <li className="menu-title">User Dashboard</li>
 
                 <li>
-                  <NavLink to="/dashboard" className={navClass}>
+                  <NavLink to="/dashboard/user" className={navClass}>
                     <FaChartBar /> Dashboard
                   </NavLink>
                 </li>

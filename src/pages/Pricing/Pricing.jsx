@@ -2,12 +2,14 @@ import React from "react";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
+import usePremium from "../../hooks/usePremium";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 
 const Pricing = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+  const { isPremium } = usePremium()
 
   const { data: userInfo = {} } = useQuery({
     queryKey: ["user", user?.email],
@@ -19,11 +21,11 @@ const Pricing = () => {
   });
 
   const handleUpgradeToPremium = async (userInfo) => {
-    const isPremium = userInfo.isPremium;
+    // const isPremium = userInfo.isPremium;
 
     if (!isPremium) {
       const paymentInfo = {
-        cost: 150000, // ৳1500
+        cost: 1500 * 100, // ৳1500
         userId: userInfo._id,
         email: userInfo.email,
         userName: userInfo.displayName,
@@ -40,7 +42,7 @@ const Pricing = () => {
   };
 
   // Already premium state
-  if (userInfo?.isPremium) {
+  if (isPremium) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center space-y-4">
