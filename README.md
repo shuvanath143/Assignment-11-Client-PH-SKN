@@ -26,6 +26,10 @@ A modern and responsive web application built to showcase real life lessons of u
 - axios
 - tailwindcss
 
+## 🔗 Resources
+Live Site: https://digital-life-lessons-skn143.web.app
+GitHub Repo: https://github.com/shuvakumar143/Assignment-11-Client-PH-SKN.git
+
 ## ⚙ How to Run Locally
 Clone the repository
 ```bash
@@ -34,6 +38,3 @@ npm install
 npm run dev
 Run: http://localhost:5173
 
-## 🔗 Resources
-Live Site: https://digital-life-lessons-skn143.web.app
-GitHub Repo: https://github.com/shuvakumar143/Assignment-11-Client-PH-SKN.git
