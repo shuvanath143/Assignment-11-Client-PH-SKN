@@ -1,4 +1,4 @@
-# 🌍 Project Name (e.g. Digital Life Lessons Platform)
+# 🌍 Digital Life Lessons Platform
 
 ## 📌 Project Overview
 A modern and responsive web application built to showcase real life lessons of users having free and premium services.
@@ -27,13 +27,12 @@ A modern and responsive web application built to showcase real life lessons of u
 - tailwindcss
 
 ## ⚙ How to Run Locally
-
-1. Clone the repository
+Clone the repository
 ```bash
 git clone https://github.com/shuvakumar143/Assignment-11-Client-PH-SKN.git
-2. npm install
-3. npm run dev
-4. http://localhost:5173
+npm install
+npm run dev
+Run: http://localhost:5173
 
 ## 🔗 Resources
 Live Site: https://digital-life-lessons-skn143.web.app
