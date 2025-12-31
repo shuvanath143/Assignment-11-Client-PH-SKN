@@ -1,7 +1,7 @@
-# 🌍 Project Name (e.g. Tourism Website)
+# 🌍 Project Name (e.g. Digital Life Lessons Platform)
 
 ## 📌 Project Overview
-A modern and responsive web application built to showcase tourism destinations, packages, and booking features.
+A modern and responsive web application built to showcase real life lessons of users having free and premium services.
 
 ## 🚀 Live Demo
 🔗 https://digital-life-lessons-skn143.web.app
@@ -13,7 +13,6 @@ A modern and responsive web application built to showcase tourism destinations, 
 - React.js
 - Tailwind CSS
 - JavaScript
-- REST API
 
 ## ✨ Core Features
 - Responsive UI for all devices
@@ -26,9 +25,3 @@ A modern and responsive web application built to showcase tourism destinations, 
 - react-router-dom
 - axios
 - tailwindcss
-
-## ⚙ How to Run Locally
-
-1. Clone the repository
-```bash
-git clone https://github.com/your-username/project-name.git
