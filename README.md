@@ -7,7 +7,7 @@ A modern and responsive web application built to showcase tourism destinations, 
 🔗 https://digital-life-lessons-skn143.web.app
 
 ## 🖼 Screenshot
-<img src="screenshot.png" />
+<img src="screenshot.PNG" />
 
 ## 🛠 Technologies Used
 - React.js
