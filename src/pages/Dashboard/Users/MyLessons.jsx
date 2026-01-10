@@ -136,40 +136,42 @@ const MyLessons = () => {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-4">My Lessons</h2>
-      <div className="overflow-x-auto rounded-lg shadow">
-        <table className="table w-full">
+    <div className="px-3 py-4 sm:px-4 sm:py-6 md:px-6 md:py-8">
+      <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 md:mb-8 text-base-content">My Lessons</h2>
+      
+      {/* Desktop Table View */}
+      <div className="hidden lg:block overflow-x-auto rounded-lg shadow border border-base-300">
+        <table className="table w-full bg-base-100">
           <thead>
-            <tr className="bg-gray-100 text-black">
-              <th>Thumbnail</th>
-              <th>Title</th>
-              <th>Category</th>
-              <th>Visibility</th>
-              <th>Access</th>
-              <th>Reactions</th>
-              <th>Saves</th>
-              <th>Created</th>
-              <th>Status</th>
-              <th>Actions</th>
+            <tr className="bg-base-200 text-base-content">
+              <th className="px-4 py-3">Thumbnail</th>
+              <th className="px-4 py-3">Title</th>
+              <th className="px-4 py-3">Category</th>
+              <th className="px-4 py-3">Visibility</th>
+              <th className="px-4 py-3">Access</th>
+              <th className="px-4 py-3">Reactions</th>
+              <th className="px-4 py-3">Saves</th>
+              <th className="px-4 py-3">Created</th>
+              <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
           <tbody>
             {lessons.map((lesson) => (
               <tr key={lesson._id}>
-                <td>
+                <td className="px-4 py-3">
                   <img
                     src={
                       lesson.featuredImageUrl ||
                       "https://via.placeholder.com/50"
                     }
                     alt={lesson.title}
-                    className="w-12 h-12 rounded"
+                    className="w-12 h-12 rounded object-cover"
                   />
                 </td>
-                <td>{lesson.title}</td>
-                <td>{lesson.category}</td>
-                <td>
+                <td className="px-4 py-3 max-w-[200px] truncate">{lesson.title}</td>
+                <td className="px-4 py-3">{lesson.category}</td>
+                <td className="px-4 py-3">
                   <button
                     className={`btn btn-sm btn-outline ${
                       lesson.visibility === "public"
@@ -183,7 +185,7 @@ const MyLessons = () => {
                     {lesson.visibility}
                   </button>
                 </td>
-                <td>
+                <td className="px-4 py-3">
                   <button
                     className={`btn btn-sm btn-outline ${
                       lesson.accessLevel === "free"
@@ -197,113 +199,210 @@ const MyLessons = () => {
                     {lesson.accessLevel}
                   </button>
                 </td>
-                <td>{lesson.likesCount || 0}</td>
-                <td>{lesson.favoritesCount || 0}</td>
-                <td>{new Date(lesson.createdAt).toLocaleDateString()}</td>
-                <td>{lesson.isReviewed}</td>
-                <td className="space-x-2">
-                  <button
-                    className="btn btn-sm btn-secondary"
-                    onClick={
-                      () => handleShowDetails(lesson._id)
-                      // window.location.assign(`/dashboard/lessons/${lesson._id}`)
-                    }
-                  >
-                    Details
-                  </button>
-
-                  <button
-                    className="btn btn-sm btn-warning"
-                    onClick={() => handleEditLesson(lesson._id)}
-                  >
-                    Edit
-                  </button>
-
-                  <button
-                    className="btn btn-sm btn-error"
-                    onClick={() => handleDeleteLesson(lesson._id)}
-                  >
-                    Delete
-                  </button>
+                <td className="px-4 py-3">{lesson.likesCount || 0}</td>
+                <td className="px-4 py-3">{lesson.favoritesCount || 0}</td>
+                <td className="px-4 py-3">{new Date(lesson.createdAt).toLocaleDateString()}</td>
+                <td className="px-4 py-3">{lesson.isReviewed}</td>
+                <td className="px-4 py-3">
+                  <div className="flex gap-2">
+                    <button
+                      className="btn btn-sm btn-secondary"
+                      onClick={() => handleShowDetails(lesson._id)}
+                    >
+                      Details
+                    </button>
+                    <button
+                      className="btn btn-sm btn-warning"
+                      onClick={() => handleEditLesson(lesson._id)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn btn-sm btn-error"
+                      onClick={() => handleDeleteLesson(lesson._id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
             {lessons.length === 0 && (
               <tr>
-                <td colSpan="9" className="text-center py-4">
+                <td colSpan="10" className="text-center py-8 text-base-content/70">
                   You have not created any lessons yet.
                 </td>
               </tr>
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="lg:hidden space-y-4">
+        {lessons.length === 0 ? (
+          <div className="text-center py-8 bg-base-100 rounded-lg shadow border border-base-300">
+            <p className="text-base-content/70">You have not created any lessons yet.</p>
+          </div>
+        ) : (
+          lessons.map((lesson) => (
+            <div key={lesson._id} className="bg-base-100 rounded-lg shadow-md p-4 space-y-3 border border-base-300">
+              {/* Header with image and title */}
+              <div className="flex gap-3">
+                <img
+                  src={lesson.featuredImageUrl || "https://via.placeholder.com/50"}
+                  alt={lesson.title}
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg object-cover flex-shrink-0"
+                />
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-sm sm:text-base line-clamp-2 mb-1">
+                    {lesson.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-gray-600 mb-2">
+                    {lesson.category}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      className={`btn btn-xs ${
+                        lesson.visibility === "public"
+                          ? "btn-success"
+                          : "btn-warning"
+                      }`}
+                      onClick={() =>
+                        handleToggleVisibility(lesson._id, lesson.visibility)
+                      }
+                    >
+                      {lesson.visibility}
+                    </button>
+                    <button
+                      className={`btn btn-xs ${
+                        lesson.accessLevel === "free"
+                          ? "btn-info"
+                          : "btn-secondary"
+                      }`}
+                      onClick={() =>
+                        handleToggleAccess(lesson._id, lesson.accessLevel)
+                      }
+                    >
+                      {lesson.accessLevel}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-4 py-2 border-t border-gray-100">
+                <div className="text-center">
+                  <div className="text-xs text-gray-500">Reactions</div>
+                  <div className="font-semibold text-sm">{lesson.likesCount || 0}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-xs text-gray-500">Saves</div>
+                  <div className="font-semibold text-sm">{lesson.favoritesCount || 0}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-xs text-gray-500">Status</div>
+                  <div className="font-semibold text-xs">{lesson.isReviewed}</div>
+                </div>
+              </div>
+
+              {/* Date and Actions */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-2 border-t border-gray-100">
+                <div className="text-xs text-gray-500">
+                  Created: {new Date(lesson.createdAt).toLocaleDateString()}
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    className="btn btn-xs btn-secondary flex-1 sm:flex-none"
+                    onClick={() => handleShowDetails(lesson._id)}
+                  >
+                    Details
+                  </button>
+                  <button
+                    className="btn btn-xs btn-warning flex-1 sm:flex-none"
+                    onClick={() => handleEditLesson(lesson._id)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn btn-xs btn-error flex-1 sm:flex-none"
+                    onClick={() => handleDeleteLesson(lesson._id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
         {/* Details Modal */}
         <dialog ref={detailsModalRef} className="modal modal-middle">
           {particularLesson && (
-            <div className="modal-box space-y-6">
+            <div className="modal-box w-11/12 max-w-2xl max-h-[90vh] overflow-y-auto p-4 sm:p-6 md:p-8">
               {/* Header */}
-              <div className="border-b pb-3">
-                <h3 className="text-2xl font-bold text-gray-800">
+              <div className="border-b pb-3 md:pb-4">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-2 line-clamp-2">
                   {particularLesson.title}
                 </h3>
-                <p className="text-sm text-gray-700 mt-1">
+                <p className="text-xs sm:text-sm text-gray-700">
                   {particularLesson.category} • Created by{" "}
                   {particularLesson.creatorName}
                 </p>
               </div>
 
               {/* Descriptions */}
-              <div className="space-y-3">
-                <p className="text-gray-700 font-semibold">
+              <div className="space-y-3 md:space-y-4">
+                <p className="text-sm sm:text-base text-gray-700 font-semibold">
                   {particularLesson.shortDescription}
                 </p>
-                <p className="text-gray-700 leading-relaxed">
+                <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
                   {particularLesson.fullDescription}
                 </p>
               </div>
 
               {/* Stats Section */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                 {/* Stat Item */}
-                <div className="p-4 bg-blue-100 rounded-xl shadow-sm text-center">
-                  <h3 className="text-sm text-gray-700 font-semibold">Views</h3>
-                  <p className="text-xl font-bold text-gray-800">
+                <div className="p-3 md:p-4 bg-blue-100 rounded-lg md:rounded-xl shadow-sm text-center">
+                  <h3 className="text-xs sm:text-sm text-gray-700 font-semibold mb-1">Views</h3>
+                  <p className="text-lg sm:text-xl font-bold text-gray-800">
                     {particularLesson.views}
                   </p>
                 </div>
 
-                <div className="p-4 bg-blue-100 rounded-xl shadow-sm text-center">
-                  <h3 className="text-sm text-gray-700 font-semibold">
+                <div className="p-3 md:p-4 bg-blue-100 rounded-lg md:rounded-xl shadow-sm text-center">
+                  <h3 className="text-xs sm:text-sm text-gray-700 font-semibold mb-1">
                     Liked By
                   </h3>
-                  <p className="text-xl font-bold text-gray-800">
+                  <p className="text-lg sm:text-xl font-bold text-gray-800">
                     {particularLesson.likesCount}
                   </p>
                 </div>
 
-                <div className="p-4 bg-blue-100 rounded-xl shadow-sm text-center">
-                  <h3 className="text-sm text-gray-700 font-semibold">
+                <div className="p-3 md:p-4 bg-blue-100 rounded-lg md:rounded-xl shadow-sm text-center">
+                  <h3 className="text-xs sm:text-sm text-gray-700 font-semibold mb-1">
                     Favorites
                   </h3>
-                  <p className="text-xl font-bold text-gray-800">
+                  <p className="text-lg sm:text-xl font-bold text-gray-800">
                     {particularLesson.favoritesCount}
                   </p>
                 </div>
 
-                <div className="p-4 bg-blue-100 rounded-xl shadow-sm text-center">
-                  <h3 className="text-sm text-gray-700 font-semibold">
+                <div className="p-3 md:p-4 bg-blue-100 rounded-lg md:rounded-xl shadow-sm text-center">
+                  <h3 className="text-xs sm:text-sm text-gray-700 font-semibold mb-1">
                     Reports
                   </h3>
-                  <p className="text-xl font-bold text-gray-800">
+                  <p className="text-lg sm:text-xl font-bold text-gray-800">
                     {particularLesson.reportsCount}
                   </p>
                 </div>
               </div>
 
               {/* Modal Close Button */}
-              <div className="modal-action">
+              <div className="modal-action pt-4">
                 <form method="dialog">
-                  <button className="btn btn-primary">Close</button>
+                  <button className="btn btn-primary w-full sm:w-auto">Close</button>
                 </form>
               </div>
             </div>
@@ -311,12 +410,12 @@ const MyLessons = () => {
         </dialog>
         <dialog ref={editDetailsModalRef} className="modal modal-middle">
           {particularLesson && (
-            <div className="modal-box max-h-[90vh] overflow-y-auto">
-              <h2 className="text-2xl font-semibold mb-4">Edit Lesson</h2>
+            <div className="modal-box w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto p-4 sm:p-6 md:p-8">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-semibold mb-4 md:mb-6">Edit Lesson</h2>
 
               <form
                 onSubmit={handleSubmit(handleUpdateLesson)}
-                className="space-y-4"
+                className="space-y-4 md:space-y-6"
               >
                 {/* Title */}
                 <div>
@@ -453,7 +552,6 @@ const MyLessons = () => {
           )}
         </dialog>
       </div>
-    </div>
   );
 };
 

@@ -98,55 +98,55 @@ const AddLesson = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg relative">
+    <div className="max-w-4xl mx-auto p-6 bg-base-100 shadow-md rounded-lg relative border border-base-300">
       {showLottie && (
-        <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50">
+        <div className="absolute inset-0 bg-base-100 bg-opacity-80 flex items-center justify-center z-50">
           <Lottie animationData={successAnimation} loop={false} />
         </div>
       )}
-      <h2 className="text-2xl font-bold mb-4">Add New Lesson</h2>
+      <h2 className="text-2xl font-bold mb-4 text-base-content">Add New Lesson</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Title */}
         <div>
-          <label className="font-semibold">Lesson Title</label>
+          <label className="font-semibold text-base-content">Lesson Title</label>
           <input
             {...register("title", { required: true })}
             type="text"
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border border-base-300 px-3 py-2 rounded bg-base-100 text-base-content focus:ring-2 focus:ring-primary/50 focus:border-primary"
             placeholder="Enter lesson title"
           />
           {errors.title && (
-            <p className="text-red-500 text-sm">Title is required</p>
+            <p className="text-error text-sm">Title is required</p>
           )}
         </div>
 
         {/* Short Description */}
         <div>
-          <label className="font-semibold">Short Description</label>
+          <label className="font-semibold text-base-content">Short Description</label>
           <textarea
             {...register("shortDescription", { required: true })}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border border-base-300 px-3 py-2 rounded bg-base-100 text-base-content focus:ring-2 focus:ring-primary/50 focus:border-primary"
             placeholder="A quick summary of the lesson"
           ></textarea>
         </div>
 
         {/* Full Description */}
         <div>
-          <label className="font-semibold">Full Description / Story</label>
+          <label className="font-semibold text-base-content">Full Description / Story</label>
           <textarea
             {...register("fullDescription", { required: true })}
-            className="w-full border px-3 py-2 rounded h-40"
+            className="w-full border border-base-300 px-3 py-2 rounded h-40 bg-base-100 text-base-content focus:ring-2 focus:ring-primary/50 focus:border-primary"
             placeholder="Write the full life lesson story here..."
           ></textarea>
         </div>
 
         {/* Category */}
         <div>
-          <label className="font-semibold">Category</label>
+          <label className="font-semibold text-base-content">Category</label>
           <select
             {...register("category", { required: true })}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border border-base-300 px-3 py-2 rounded bg-base-100 text-base-content focus:ring-2 focus:ring-primary/50 focus:border-primary"
           >
             <option value="">Select category</option>
             <option>Personal Growth</option>
@@ -159,10 +159,10 @@ const AddLesson = () => {
 
         {/* Emotional Tone */}
         <div>
-          <label className="font-semibold">Emotional Tone</label>
+          <label className="font-semibold text-base-content">Emotional Tone</label>
           <select
             {...register("emotionalTone", { required: true })}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border border-base-300 px-3 py-2 rounded bg-base-100 text-base-content focus:ring-2 focus:ring-primary/50 focus:border-primary"
           >
             <option value="">Select tone</option>
             <option>Motivational</option>
@@ -174,10 +174,10 @@ const AddLesson = () => {
 
         {/* Visibility */}
         <div>
-          <label className="font-semibold">Visibility</label>
+          <label className="font-semibold text-base-content">Visibility</label>
           <select
             {...register("visibility")}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border border-base-300 px-3 py-2 rounded bg-base-100 text-base-content focus:ring-2 focus:ring-primary/50 focus:border-primary"
           >
             <option value="public">Public</option>
             <option value="private">Private</option>
@@ -186,13 +186,13 @@ const AddLesson = () => {
 
         {/* Access Level (FREE / PREMIUM) */}
         <div>
-          <label className="font-semibold">Access Level</label>
+          <label className="font-semibold text-base-content">Access Level</label>
 
           <select
             {...register("accessLevel")}
             disabled={!isPremiumUser.isPremium}
-            className={`w-full border px-3 py-2 rounded ${
-              !isPremiumUser.isPremium ? "bg-gray-200" : ""
+            className={`w-full border border-base-300 px-3 py-2 rounded focus:ring-2 focus:ring-primary/50 focus:border-primary ${
+              !isPremiumUser.isPremium ? "bg-base-200 text-base-content/50 cursor-not-allowed" : "bg-base-100 text-base-content"
             }`}
           >
             <option value="free">Free</option>
@@ -200,7 +200,7 @@ const AddLesson = () => {
           </select>
 
           {!isPremiumUser.isPremium && (
-            <p className="text-sm text-blue-500">
+            <p className="text-sm text-accent">
               Upgrade to Premium ⭐ to create premium lessons
             </p>
           )}
@@ -208,19 +208,19 @@ const AddLesson = () => {
 
         {/* Image Upload */}
         <div>
-          <label className="font-semibold">Featured Image (optional)</label>
+          <label className="font-semibold text-base-content">Featured Image (optional)</label>
           <input
             {...register("image")}
             type="file"
             accept="image/*"
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border border-base-300 px-3 py-2 rounded bg-base-100 text-base-content focus:ring-2 focus:ring-primary/50 focus:border-primary file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-content hover:file:bg-primary-focus"
           />
         </div>
 
         {/* Submit */}
         <button
           type="submit"
-          className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded"
+          className="btn btn-primary text-primary-content px-5 py-2 rounded hover:btn-primary-focus"
         >
           Add Lesson
         </button>

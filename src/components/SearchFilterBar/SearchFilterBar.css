@@ -1,0 +1,57 @@
+/* Custom styles for SearchFilterBar component */
+
+/* Glassmorphism effect enhancement */
+.search-filter-bar {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Custom scrollbar for dropdown menus */
+.filter-dropdown::-webkit-scrollbar {
+  width: 4px;
+}
+
+.filter-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.filter-dropdown::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 2px;
+}
+
+.filter-dropdown::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.5);
+}
+
+/* Smooth focus ring animation */
+.search-input:focus {
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+/* Custom gradient border animation */
+@keyframes gradient-border {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-border-active {
+  background: linear-gradient(-45deg, #6366f1, #8b5cf6, #a855f7, #6366f1);
+  background-size: 400% 400%;
+  animation: gradient-border 3s ease infinite;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .search-filter-bar {
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+  }
+}

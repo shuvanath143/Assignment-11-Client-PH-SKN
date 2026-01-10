@@ -19,10 +19,12 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import usePremium from "../../../hooks/usePremium";
 
 const UserDashboard = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const { isPremium } = usePremium()
 
   /* ------------------ QUERIES ------------------ */
 
@@ -64,21 +66,21 @@ const UserDashboard = () => {
   }).reverse();
 
   return (
-    <div className="p-6">
+    <div className="px-3 py-4 sm:px-4 sm:py-6 md:px-6 md:py-8">
       {/* ================== HEADER ================== */}
-      <h1 className="text-3xl font-bold mb-6">
+      <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 md:mb-8 text-base-content">
         Welcome back, {user?.name} 👋
       </h1>
 
       {/* ================== STATS ================== */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8 md:mb-12">
         <StatCard title="Lessons Created" value={myLessons.length} />
         <StatCard title="Saved Lessons" value={favorites.length} />
         <StatCard title="Recent Lessons" value={myLessons.slice(0, 3).length} />
       </div>
 
       {/* ================== QUICK ACTIONS ================== */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8 md:mb-12">
         <QuickLink
           to="/dashboard/add-lesson"
           icon={<FaPlus />}
@@ -102,12 +104,12 @@ const UserDashboard = () => {
       </div>
 
       {/* ================== ANALYTICS ================== */}
-      <div className="bg-white p-6 rounded-xl shadow-md mb-12">
-        <h2 className="text-xl font-bold mb-6">
+      <div className="bg-base-100 p-3 sm:p-4 md:p-6 rounded-lg md:rounded-xl shadow-md mb-6 sm:mb-8 md:mb-12 border border-base-300">
+        <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 md:mb-6 text-base-content">
           Weekly Contributions
         </h2>
 
-        <div className="w-full h-64">
+        <div className="w-full h-48 sm:h-56 md:h-64">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={weeklyData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -116,6 +118,7 @@ const UserDashboard = () => {
               <Tooltip />
               <Bar
                 dataKey="count"
+                fill="hsl(var(--color-primary))"
                 radius={[6, 6, 0, 0]}
               />
             </BarChart>
@@ -146,7 +149,8 @@ const UserDashboard = () => {
               <LessonCard
                 key={lesson._id}
                 lesson={lesson}
-                isPremiumUser={user?.subscription === "premium"}
+                isPremium={isPremium}
+                // isPremiumUser={user?.subscription === "premium"}
               />
             ))}
         </div>
@@ -158,19 +162,19 @@ const UserDashboard = () => {
 /* ================== SMALL COMPONENTS ================== */
 
 const StatCard = ({ title, value }) => (
-  <div className="bg-white p-6 rounded-xl shadow-md">
-    <p className="text-gray-500 text-sm">{title}</p>
-    <p className="text-3xl font-bold mt-2">{value}</p>
+  <div className="bg-base-100 p-3 sm:p-4 md:p-6 rounded-lg md:rounded-xl shadow-md border border-base-300">
+    <p className="text-base-content/70 text-xs sm:text-sm mb-1 md:mb-2">{title}</p>
+    <p className="text-xl sm:text-2xl md:text-3xl font-bold text-base-content">{value}</p>
   </div>
 );
 
 const QuickLink = ({ to, icon, label }) => (
   <Link
     to={to}
-    className="flex flex-col items-center justify-center gap-3 bg-gray-100 hover:bg-blue-600 hover:text-white transition p-6 rounded-xl shadow-md"
+    className="flex flex-col items-center justify-center gap-2 md:gap-3 bg-base-200 hover:bg-primary hover:text-primary-content transition-all duration-300 p-3 sm:p-4 md:p-6 rounded-lg md:rounded-xl shadow-md min-h-[80px] sm:min-h-[100px] md:min-h-[120px]"
   >
-    <span className="text-2xl">{icon}</span>
-    <span className="font-semibold">{label}</span>
+    <span className="text-lg sm:text-xl md:text-2xl">{icon}</span>
+    <span className="font-semibold text-xs sm:text-sm md:text-base text-center leading-tight">{label}</span>
   </Link>
 );
 

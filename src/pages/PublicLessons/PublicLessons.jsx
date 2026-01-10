@@ -2,9 +2,11 @@ import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import useAxios from '../../hooks/useAxios';
 import LessonCard from '../../components/LessonCard/LessonCard';
+import usePremium from '../../hooks/usePremium';
 
 const PublicLessons = () => {
     const axiosInstance = useAxios()
+    const { isPremium } = usePremium()
     const { data: publicLessons = [] } = useQuery({
         queryKey: ['public-lessons'],
         queryFn: async () => {
@@ -23,6 +25,7 @@ const PublicLessons = () => {
                 <LessonCard
                   key={lesson._id}
                   lesson={lesson}
+                  isPremium={isPremium}
                   isInsideDashboard={false}
                 />
               ))}

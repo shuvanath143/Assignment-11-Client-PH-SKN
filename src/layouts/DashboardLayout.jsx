@@ -8,6 +8,7 @@ import {
   FaRegCreditCard,
   FaFlag,
 } from "react-icons/fa";
+import { MdMenu } from "react-icons/md";
 
 import { Link, NavLink, Outlet } from "react-router";
 import useRole from "../hooks/useRole";
@@ -27,20 +28,22 @@ const DashboardLayout = () => {
       {/* ================= Main Content ================= */}
       <div className="drawer-content flex flex-col">
         {/* Top Navbar */}
-        <nav className="navbar bg-base-200 shadow-sm">
-          <label
-            htmlFor="my-drawer-4"
-            className="btn btn-square btn-ghost lg:hidden"
-          >
-            ☰
-          </label>
-          <h2 className="text-lg font-semibold px-4">
-            Welcome to Digital Life Lessons Platform
-          </h2>
+        <nav className="navbar bg-base-200 shadow-sm px-4 md:px-6">
+          <div className="flex-1">
+            <label
+              htmlFor="my-drawer-4"
+              className="btn btn-square btn-ghost lg:hidden mr-2"
+            >
+              <MdMenu size={20} />
+            </label>
+            <h2 className="text-lg md:text-xl font-semibold">
+              Welcome to Digital Life Lessons Platform
+            </h2>
+          </div>
         </nav>
 
         {/* Page Content */}
-        <div className="p-4">
+        <div className="px-4 py-6 md:px-6 md:py-8">
           <Outlet />
         </div>
       </div>
@@ -50,10 +53,10 @@ const DashboardLayout = () => {
         <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
 
         <aside className="w-64 bg-base-100 border-r min-h-full">
-          <ul className="menu p-4 gap-1">
+          <ul className="menu p-4 md:p-6 gap-2">
             {/* Home */}
             <li>
-              <Link to="/" className="font-medium">
+              <Link to="/" className="font-medium py-2 md:py-3">
                 🏠 Home
               </Link>
             </li>
@@ -61,7 +64,7 @@ const DashboardLayout = () => {
             {/* ================= USER DASHBOARD ================= */}
             {role === "user" && (
               <>
-                <li className="menu-title">User Dashboard</li>
+                <li className="menu-title mt-4 mb-2">User Dashboard</li>
 
                 <li>
                   <NavLink to="/dashboard/user" className={navClass}>
@@ -98,7 +101,7 @@ const DashboardLayout = () => {
             {/* ================= ADMIN DASHBOARD ================= */}
             {role === "admin" && (
               <>
-                <li className="menu-title">Admin Dashboard</li>
+                <li className="menu-title mt-4 mb-2">Admin Dashboard</li>
 
                 <li>
                   <NavLink to="/dashboard/admin" className={navClass}>

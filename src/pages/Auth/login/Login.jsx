@@ -39,42 +39,42 @@ const Login = () => {
   };
 
   return (
-    <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl p-6">
-      <h3 className="text-3xl font-semibold text-center">Welcome Back 👋</h3>
-      <p className="text-center">Please Login</p>
+    <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl p-6 border border-base-300">
+      <h3 className="text-3xl font-semibold text-center text-base-content">Welcome Back 👋</h3>
+      <p className="text-center text-base-content/70">Please Login</p>
       <form className="card-body" onSubmit={handleSubmit(handleLogin)}>
         <fieldset className="fieldset">
           {/* email */}
-          <label className="label">Email</label>
+          <label className="label text-base-content">Email</label>
           <input
             type="email"
             {...register("email", { required: true })}
-            className="input"
+            className="input border-base-300 bg-base-100 text-base-content focus:ring-2 focus:ring-primary/50 focus:border-primary"
             placeholder="Email"
           />
           {errors.email?.type === "required" && (
-            <p className="text-red-500">Email is required</p>
+            <p className="text-error">Email is required</p>
           )}
 
           {/* password */}
-          <label className="label">Password</label>
+          <label className="label text-base-content">Password</label>
           <input
             type="password"
             {...register("password", { required: true, minLength: 6 })}
-            className="input"
+            className="input border-base-300 bg-base-100 text-base-content focus:ring-2 focus:ring-primary/50 focus:border-primary"
             placeholder="Password"
           />
           {errors.password?.type === "required" && (
-            <p className="text-red-500">Email is required</p>
+            <p className="text-error">Password is required</p>
           )}
-          {errors.email?.type === "minLength" && (
-            <p className="text-red-500">
+          {errors.password?.type === "minLength" && (
+            <p className="text-error">
               Password must be 6 characters or longer
             </p>
           )}
 
           <div>
-            <a className="link link-hover">Forgot password?</a>
+            <a className="link link-hover text-primary">Forgot password?</a>
           </div>
           {/* <button className="btn btn-neutral mt-4">Login</button> */}
           <motion.button
@@ -82,20 +82,20 @@ const Login = () => {
             whileTap={{ scale: 0.97 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="
-              w-full py-3 rounded-xl font-semibold text-white
-              bg-gradient-to-r from-[#bf0fff] to-[#ff1b6b]
-              shadow-lg
+              w-full py-3 rounded-xl font-semibold text-primary-content
+              bg-gradient-to-r from-primary to-secondary
+              shadow-lg mt-4
             "
           >
             Login
           </motion.button>
         </fieldset>
-        <p>
+        <p className="text-base-content">
           New to Digital Life Lessons? Please{" "}
           <Link
             state={location?.state}
             to="/register"
-            className="text-blue-400 hover:text-blue-700"
+            className="text-primary hover:text-primary-focus"
           >
             Register
           </Link>

@@ -22,6 +22,7 @@ import ReportedLessonManagement from "../pages/Dashboard/Admin/ReportedLessonMan
 import MyFavorites from "../pages/Dashboard/Users/MyFavorites";
 import Profile from "../pages/Dashboard/Users/Profile";
 import UserDashboard from "../pages/Dashboard/Users/UserDashboard";
+import PaymentHistory from "../pages/Dashboard/Users/PaymentHistory";
 
 // import AdminRoute from "./AdminRoute";
 
@@ -102,6 +103,10 @@ export const router = createBrowserRouter([
       {
         path: 'profile',
         Component: Profile
+      },
+      {
+        path: 'payment-history',
+        Component: PaymentHistory
       }
     ],
   },

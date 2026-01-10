@@ -3,53 +3,65 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-/* 🌞 Light Theme - Dynamic & Eye-catching */
+/* 🌞 Light Theme (Clean & Neutral – supports dark as primary) */
 @plugin "daisyui/theme" {
   name: "light";
   default: true;
 
-  /* Primary colors */
-  --color-primary: #3B82F6;       /* Bright blue - attention grabbing */
-  --color-primary-focus: #2563EB; /* Slightly darker for hover */
-  --color-primary-content: #FFFFFF; /* Text on primary buttons */
+  --color-primary: #2563EB;        /* Calm royal blue */
+  --color-primary-focus: #1D4ED8;
+  --color-primary-content: #FFFFFF;
 
-  /* Secondary colors */
-  --color-secondary: #F59E0B;      /* Vibrant amber / gold */
-  --color-secondary-focus: #D97706; 
-  --color-secondary-content: #1C1C1C;
+  --color-secondary: #6366F1;      /* Indigo accent */
+  --color-secondary-content: #FFFFFF;
 
-  /* Base / surface layers */
-  --color-base-100: #FFFFFF;      /* Pure white for clean surfaces */
-  --color-base-200: #F3F4F6;      /* Light gray for cards / panels */
-  --color-base-300: #E5E7EB;      /* Slightly darker gray for secondary surfaces */
-  --color-base-content: #111827;  /* Dark gray text for readability */
+  --color-base-100: #FFFFFF;
+  --color-base-200: #F3F4F6;
+  --color-base-300: #E5E7EB;
+  --color-base-content: #0F172A;
 
-  /* Accent / feedback */
-  --color-accent: #10B981;        /* Green for success / highlights */
-  --color-accent-content: #FFFFFF;
+  --color-accent: #22D3EE;         /* Cyan hint */
+  --color-accent-content: #0F172A;
 
-  --color-info: #0EA5E9;          /* Sky-blue for info */
-  --color-success: #22C55E;       /* Vibrant green */
-  --color-warning: #FBBF24;       /* Amber warning */
-  --color-error: #EF4444;         /* Red error */
+  --color-info: #38BDF8;
+  --color-success: #22C55E;
+  --color-warning: #FACC15;
+  --color-error: #EF4444;
 }
 
-/* 🌙 Dark Theme (unchanged) */
+/* 🌙 Dark Theme — Palette 2: Modern Dark Reflection */
 @plugin "daisyui/theme" {
   name: "dark";
 
-  --color-primary: #A3E635;     /* neon-lime but soft */
-  --color-secondary: #7DD3FC;   /* sky-blue accent */
-  --color-base-100: #0F172A;    /* slate-900 */
-  --color-base-200: #020617;    /* slate-950 */
-  --color-base-300: #020617;
-  --color-base-content: #E5E7EB; /* gray-200 */
+  /* Primary system */
+  --color-primary: #4C1D95;        /* Deep violet */
+  --color-primary-focus: #5B21B6;
+  --color-primary-content: #E5E7EB;
+
+  --color-secondary: #22D3EE;      /* Electric cyan */
+  --color-secondary-content: #020617;
+
+  /* Base layers */
+  --color-base-100: #020617;       /* Dark slate (main bg) */
+  --color-base-200: #0F172A;       /* Card bg */
+  --color-base-300: #1E293B;       /* Elevated surfaces */
+  --color-base-content: #E5E7EB;   /* Soft white text */
+
+  /* Accent & feedback */
+  --color-accent: #22D3EE;         /* Cyan highlight */
+  --color-accent-content: #020617;
+
+  --color-info: #38BDF8;
+  --color-success: #4ADE80;
+  --color-warning: #FACC15;
+  --color-error: #F87171;
 }
 
 body {
   font-family: "Urbanist", sans-serif;
 }
 
+/* SweetAlert fix */
 .swal-over-modal {
   z-index: 9999 !important;
 }

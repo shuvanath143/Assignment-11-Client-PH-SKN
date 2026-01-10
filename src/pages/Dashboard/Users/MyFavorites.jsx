@@ -51,16 +51,16 @@ const MyFavorites = () => {
   });
 
   if (isLoading)
-    return <p className="text-center py-10">Loading favorites...</p>;
+    return <p className="text-center py-10 text-base-content/70">Loading favorites...</p>;
 
   return (
     <div className="p-6">
-      <h2 className="text-3xl font-bold mb-6">My Favorite Lessons</h2>
+      <h2 className="text-3xl font-bold mb-6 text-base-content">My Favorite Lessons</h2>
 
       {/* Filters */}
       <div className="flex gap-4 mb-6">
         <select
-          className="select select-bordered"
+          className="select select-bordered border-base-300 bg-base-100 text-base-content focus:ring-2 focus:ring-primary/50 focus:border-primary"
           onChange={(e) => setCategoryFilter(e.target.value)}
         >
           <option value="">All Categories</option>
@@ -70,7 +70,7 @@ const MyFavorites = () => {
         </select>
 
         <select
-          className="select select-bordered"
+          className="select select-bordered border-base-300 bg-base-100 text-base-content focus:ring-2 focus:ring-primary/50 focus:border-primary"
           onChange={(e) => setToneFilter(e.target.value)}
         >
           <option value="">All Emotional Tones</option>
@@ -81,10 +81,10 @@ const MyFavorites = () => {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto bg-white shadow rounded-xl">
+      <div className="overflow-x-auto bg-base-100 shadow rounded-xl border border-base-300">
         <table className="table">
-          <thead className="bg-gray-100">
-            <tr>
+          <thead className="bg-base-200">
+            <tr className="text-base-content">
               <th>#</th>
               <th>Lesson</th>
               <th>Category</th>
@@ -96,22 +96,22 @@ const MyFavorites = () => {
 
           <tbody>
             {filteredFavorites.map((fav, index) => (
-              <tr key={fav._id}>
-                <td>{index + 1}</td>
-                <td className="font-semibold">{fav.lessonTitle}</td>
-                <td>{fav.category}</td>
-                <td>{fav.emotionalTone}</td>
-                <td>{fav.creatorName}</td>
+              <tr key={fav._id} className="hover:bg-base-200/50">
+                <td className="text-base-content">{index + 1}</td>
+                <td className="font-semibold text-base-content">{fav.lessonTitle}</td>
+                <td className="text-base-content">{fav.category}</td>
+                <td className="text-base-content">{fav.emotionalTone}</td>
+                <td className="text-base-content">{fav.creatorName}</td>
                 <td className="flex gap-2">
                   <Link
                     to={`/lessons/${fav.lessonId}`}
-                    className="btn btn-sm btn-info"
+                    className="btn btn-info"
                   >
                     Details
                   </Link>
                   <button
                     onClick={() => handleRemove(fav._id, fav.lessonId)}
-                    className="btn btn-sm btn-error"
+                    className="btn btn-error"
                   >
                     Remove
                   </button>
@@ -121,7 +121,7 @@ const MyFavorites = () => {
 
             {filteredFavorites.length === 0 && (
               <tr>
-                <td colSpan="7" className="text-center py-8">
+                <td colSpan="7" className="text-center py-8 text-base-content/70">
                   No favorites found
                 </td>
               </tr>

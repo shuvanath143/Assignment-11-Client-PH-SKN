@@ -78,51 +78,51 @@ const Register = () => {
   };
 
   return (
-    <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl">
-      <h3 className="text-3xl font-semibold text-center">
+    <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl border border-base-300">
+      <h3 className="text-3xl font-semibold text-center text-base-content">
         Welcome to Digital Life Lessons
       </h3>
-      <p className="text-center">Please Register</p>
+      <p className="text-center text-base-content/70">Please Register</p>
       <form onSubmit={handleSubmit(handleRegistration)} className="card-body">
         <fieldset className="fieldset">
           {/* Name */}
-          <label className="label">Name</label>
+          <label className="label text-base-content">Name</label>
           <input
             type="name"
             {...register("name", { required: true })}
-            className="input"
+            className="input border-base-300 bg-base-100 text-base-content focus:ring-2 focus:ring-primary/50 focus:border-primary"
             placeholder="Your Name"
           />
           {errors.name?.type === "required" && (
-            <p className="text-red-500">Name is required</p>
+            <p className="text-error">Name is required</p>
           )}
 
           {/* email */}
-          <label className="label">Email</label>
+          <label className="label text-base-content">Email</label>
           <input
             type="email"
             {...register("email", { required: true })}
-            className="input"
+            className="input border-base-300 bg-base-100 text-base-content focus:ring-2 focus:ring-primary/50 focus:border-primary"
             placeholder="Email"
           />
           {errors.email?.type === "required" && (
-            <p className="text-red-500">Email is required</p>
+            <p className="text-error">Email is required</p>
           )}
 
           {/* Image */}
-          <label className="label">Image</label>
+          <label className="label text-base-content">Image</label>
           <input
             type="file"
             {...register("photo", { required: true })}
-            className="file-input"
+            className="file-input border-base-300 bg-base-100 text-base-content focus:ring-2 focus:ring-primary/50 focus:border-primary file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-content hover:file:bg-primary-focus"
             placeholder="Your Photo"
           />
-          {errors.email?.type === "required" && (
-            <p className="text-red-500">Photo is required</p>
+          {errors.photo?.type === "required" && (
+            <p className="text-error">Photo is required</p>
           )}
 
           {/* password */}
-          <label className="label">Password</label>
+          <label className="label text-base-content">Password</label>
           <input
             type="password"
             {...register("password", {
@@ -130,28 +130,28 @@ const Register = () => {
               minLength: 6,
               pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/,
             })}
-            className="input"
+            className="input border-base-300 bg-base-100 text-base-content focus:ring-2 focus:ring-primary/50 focus:border-primary"
             placeholder="Password"
           />
           {errors.password?.type === "required" && (
-            <p className="text-red-500">Password is required</p>
+            <p className="text-error">Password is required</p>
           )}
           {errors.password?.type === "minLength" && (
-            <p className="text-red-500">
+            <p className="text-error">
               Password must be 6 characters or longer
             </p>
           )}
           {errors.password?.type === "pattern" && (
-            <p className="text-red-500">
+            <p className="text-error">
               Password must have at least one lowercase, one uppercase and one
               special character
             </p>
           )}
-          <button className="btn btn-neutral mt-4">Register</button>
+          <button className="btn btn-primary mt-4 text-primary-content">Register</button>
         </fieldset>
-        <p>
+        <p className="text-base-content">
           Already have an account? Please{" "}
-          <Link state={location.state} to="/login" className="text-blue-400 hover:text-blue-700">
+          <Link state={location.state} to="/login" className="text-primary hover:text-primary-focus">
             Login
           </Link>
         </p>
